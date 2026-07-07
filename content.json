@@ -23,15 +23,15 @@
   },
 
   "stats": {
-    "playersOnline": 1,
-    "playersToday": 5,
-    "playersTotal": 11,
-    "playersPeak": 3
+    "playersOnline": 2,
+    "playersToday": 26,
+    "playersTotal": 41,
+    "playersPeak": 7
   },
 
   "server": {
     "status": "online",
-    "lastChecked": "2026-07-07"
+    "lastChecked": "2026-07-08"
   },
 
   "about": {
@@ -57,7 +57,7 @@
   ],
 
   "footer": {
-    "contactEmail": "kontakt@example.com",
+    "contactEmail": "Soon",
     "discordUrl": "https://discord.gg/S9JXnyFeBN",
     "social": {
       "twitter": "#",
