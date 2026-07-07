@@ -263,7 +263,7 @@ const GAME_CONFIG = {
 
   // ---------- Screenshots ----------
   screenshots: [
-    { src: "assets/screenshots/screenshot1.jpg", alt: "Spielszene aus TasteJump" }
+    { src: "assets/screenshots/screenshot1.png", alt: "Spielszene aus TasteJump" }
     // Weitere Einträge einfach hier ergänzen:
     // { src: "assets/screenshots/screenshot2.jpg", alt: "Beschreibung" }
   ],
