@@ -2,17 +2,22 @@
  * ============================================================
  *  ADMIN-KONFIGURATION
  * ============================================================
- * Diese Datei ist die zentrale Stelle, um Inhalte der Website
- * zu aktualisieren, OHNE den restlichen Code anfassen zu müssen.
+ * WICHTIG: Fast alle Inhalte hier sind nur noch ein FALLBACK,
+ * der greift, falls GitHub mal nicht erreichbar ist. Der Normalfall
+ * ist: die Seite lädt alle Inhalte live aus content.json im
+ * Website-Repo, siehe:
  *
- * Ändere hier:
- *  - Download-Link, Version, Dateigröße, Datum
- *  - Spielerstatistiken (Platzhalter für spätere Live-Daten)
- *  - Serverstatus
- *  - News- / Changelog-Einträge
+ *   https://github.com/ITasteI/tastejump-website/blob/main/content.json
  *
- * Später kann GAME_CONFIG einfach durch einen Fetch von einer
- * echten API ersetzt werden (siehe loadLiveData() in script.js).
+ * Um Spielinfos, Download-Daten, Features, Screenshots, Spielerzahlen,
+ * Serverstatus oder Kontakt-/Social-Links zu ändern, editierst du
+ * NUR content.json direkt im Browser auf GitHub (Stift-Symbol,
+ * ändern, "Commit changes") — die Website lädt sich die neuen Werte
+ * automatisch, ganz ohne erneutes Hochladen/Deploy.
+ *
+ * Diese Datei (config.js) musst du nur noch anfassen, wenn du auch
+ * den Fallback aktuell halten willst (optional) oder wirklich neue
+ * Felder/Struktur brauchst.
  * ============================================================
  */
 
@@ -53,27 +58,19 @@ const GAME_CONFIG = {
     autoSyncChangelog: true
   },
 
-  // ---------- GitHub-Anbindung: Live-Daten ----------
-  // Spielerzahlen & Serverstatus werden aus live-data.json im
-  // Website-Repo geladen (siehe syncLiveDataFromGitHub() in script.js).
-  //
-  // WICHTIG: Um Spielerzahlen oder Serverstatus zu ändern, musst du
-  // NICHT die Website neu hochladen! Öffne stattdessen direkt im
-  // Browser:
-  //   https://github.com/ITasteI/tastejump-website/blob/main/live-data.json
-  // Klicke auf das Stift-Symbol (Bearbeiten), ändere die Werte,
-  // dann unten auf "Commit changes" klicken. Die Website zieht sich
-  // die neuen Werte automatisch (spätestens alle 60 Sekunden, bei
-  // jedem Seitenaufruf sowieso).
-  liveData: {
+  // ---------- GitHub-Anbindung: Alle Live-Inhalte ----------
+  // game, download, stats, server, about, screenshots und footer
+  // werden aus content.json im Website-Repo geladen (siehe
+  // syncContentFromGitHub() in script.js).
+  content: {
     repo: "ITasteI/tastejump-website",
     branch: "main",
-    path: "live-data.json",
+    path: "content.json",
     autoSync: true
   },
 
   // ---------- Spielerstatistiken (Platzhalter) ----------
-  // FALLBACK, falls live-data.json nicht erreichbar ist.
+  // FALLBACK, falls content.json nicht erreichbar ist.
   stats: {
     playersOnline: 0,
     playersToday: 0,
@@ -82,7 +79,7 @@ const GAME_CONFIG = {
   },
 
   // ---------- Serverstatus ----------
-  // FALLBACK, falls live-data.json nicht erreichbar ist.
+  // FALLBACK, falls content.json nicht erreichbar ist.
   server: {
     // mögliche Werte: "online", "offline", "maintenance"
     status: "online",

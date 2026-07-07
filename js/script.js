@@ -2,10 +2,10 @@
  * ============================================================
  *  TasteJump — Website Logik
  * ============================================================
- * Liest alle Inhalte aus GAME_CONFIG (js/config.js) und rendert
- * sie in die entsprechenden DOM-Elemente. So bleibt die Website
- * leicht erweiterbar: neue Inhalte werden nur in config.js
- * gepflegt, dieser Code muss dafür nicht angefasst werden.
+ * Liest alle Inhalte aus GAME_CONFIG und rendert sie in die
+ * entsprechenden DOM-Elemente. GAME_CONFIG kommt zunächst aus
+ * config.js (Fallback) und wird dann per syncContentFromGitHub()
+ * live durch content.json aus dem Website-Repo überschrieben.
  * ============================================================
  */
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLightbox();
 
   syncChangelogFromGitHub();
-  syncLiveDataFromGitHub();
+  syncContentFromGitHub();
 
   // Zusätzliche automatische Prüfung, falls die Seite lange geöffnet
   // bleibt (z.B. ein Browser-Tab, der nicht neu geladen wird): alle
@@ -32,9 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
   setInterval(syncChangelogFromGitHub, TWO_HOURS_MS);
 
-  // Spielerzahlen/Serverstatus sollen sich "live" anfühlen -> öfter prüfen.
+  // Alle übrigen Inhalte (Spielerzahlen, Serverstatus, Texte, ...)
+  // sollen sich "live" anfühlen -> öfter prüfen.
   const ONE_MINUTE_MS = 60 * 1000;
-  setInterval(syncLiveDataFromGitHub, ONE_MINUTE_MS);
+  setInterval(syncContentFromGitHub, ONE_MINUTE_MS);
 });
 
 /* ---------------------------------------------------------
@@ -347,24 +348,34 @@ function parseReleaseBody(body) {
  * im Website-Repo laden — dort direkt auf github.com bearbeitbar,
  * ganz ohne Website neu hochzuladen.
  * ------------------------------------------------------- */
-async function syncLiveDataFromGitHub() {
-  const { liveData } = GAME_CONFIG;
-  if (!liveData || !liveData.autoSync || !liveData.repo) return;
+async function syncContentFromGitHub() {
+  const { content } = GAME_CONFIG;
+  if (!content || !content.autoSync || !content.repo) return;
 
   try {
-    const url = `https://raw.githubusercontent.com/${liveData.repo}/${liveData.branch}/${liveData.path}?t=${Date.now()}`;
+    const url = `https://raw.githubusercontent.com/${content.repo}/${content.branch}/${content.path}?t=${Date.now()}`;
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`GitHub antwortete mit ${res.status}`);
 
     const data = await res.json();
+    if (data.game) GAME_CONFIG.game = data.game;
+    if (data.download) GAME_CONFIG.download = data.download;
     if (data.stats) GAME_CONFIG.stats = data.stats;
     if (data.server) GAME_CONFIG.server = data.server;
+    if (data.about) GAME_CONFIG.about = data.about;
+    if (data.screenshots) GAME_CONFIG.screenshots = data.screenshots;
+    if (data.footer) GAME_CONFIG.footer = data.footer;
 
+    renderHero();
+    renderDownload();
+    renderGallery();
+    renderAbout();
     renderStats();
     renderServerStatus();
+    renderFooter();
   } catch (err) {
     // Fallback-Daten aus config.js bleiben unverändert sichtbar.
-    console.warn('Live-Daten-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
+    console.warn('Content-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
   }
 }
 
