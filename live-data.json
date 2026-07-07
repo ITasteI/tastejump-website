@@ -1,12 +1,12 @@
 {
   "stats": {
-    "playersOnline": 2,
+    "playersOnline": 1,
     "playersToday": 5,
-    "playersTotal": 10,
-    "playersPeak": 2
+    "playersTotal": 11,
+    "playersPeak": 3
   },
   "server": {
     "status": "online",
-    "lastChecked": "2026-07-07 14:00"
+    "lastChecked": "2026-07-07"
   }
 }
