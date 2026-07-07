@@ -220,6 +220,14 @@ function renderFooter() {
   const discordEl = document.getElementById('footerDiscord');
   if (discordEl) discordEl.href = footer.discordUrl;
 
+  if (footer.social) {
+    const socialIds = { twitter: 'socialTwitter', youtube: 'socialYoutube', instagram: 'socialInstagram', tiktok: 'socialTiktok' };
+    for (const [key, id] of Object.entries(socialIds)) {
+      const el = document.getElementById(id);
+      if (el && footer.social[key]) el.href = footer.social[key];
+    }
+  }
+
   setText('footerCopyrightName', footer.copyrightName);
   setText('footerYear', new Date().getFullYear());
 }
