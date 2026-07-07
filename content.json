@@ -8,9 +8,9 @@
 
   "download": {
     "version": "1.7.0",
-    "fileName": "TasteJumpGame.exe",
-    "filePath": "downloads/TasteJumpGame.exe",
-    "fileSizeMB": 73,
+    "fileName": "Platformer3D-Windows.zip",
+    "filePath": "https://github.com/ITasteI/platformer3d/releases/download/v1.7.0/Platformer3D-Windows.zip",
+    "fileSizeMB": 45,
     "releaseDate": "2026-07-07",
     "platform": "Windows 10/11 (64-bit)"
   },

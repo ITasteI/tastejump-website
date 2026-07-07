@@ -307,6 +307,18 @@ async function syncChangelogFromGitHub() {
     GAME_CONFIG.download.version = latest.raw;
     GAME_CONFIG.download.releaseDate = GAME_CONFIG.changelog[0].date || GAME_CONFIG.download.releaseDate;
 
+    // Download-Datei direkt vom GitHub-Release-Asset übernehmen (kein
+    // manuelles Hochladen/Aktualisieren mehr nötig — die Website zeigt
+    // automatisch immer die neueste, vom Spiel-Repo veröffentlichte Datei).
+    const latestRelease = published[0];
+    const asset = latestRelease.assets && latestRelease.assets.find(a => a.name.endsWith('.zip'))
+      || (latestRelease.assets && latestRelease.assets[0]);
+    if (asset) {
+      GAME_CONFIG.download.fileName = asset.name;
+      GAME_CONFIG.download.filePath = asset.browser_download_url;
+      GAME_CONFIG.download.fileSizeMB = Math.round(asset.size / (1024 * 1024));
+    }
+
     renderChangelog();
     renderHero();
     renderDownload();

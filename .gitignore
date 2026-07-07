@@ -1,2 +1,8 @@
 .DS_Store
 Thumbs.db
+
+# Große Build-Dateien gehören ins GitHub-Release des Spiel-Repos
+# (platformer3d), nicht in dieses Website-Repo.
+downloads/
+*.exe
+*.zip

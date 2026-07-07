@@ -36,16 +36,17 @@ const GAME_CONFIG = {
   },
 
   // ---------- Download ----------
-  // Hinweis: "version" und "releaseDate" werden beim Laden der Seite
-  // automatisch durch den neuesten GitHub-Tag überschrieben, sofern
-  // die GitHub-API erreichbar ist (siehe github.repo unten sowie
-  // syncChangelogFromGitHub() in script.js). Die Werte hier dienen
-  // nur als Fallback, falls die API nicht erreichbar ist.
+  // Hinweis: Version, Dateiname, Dateigröße und Download-Link werden
+  // beim Laden der Seite automatisch durch das neueste GitHub-Release-
+  // Asset überschrieben, sofern die GitHub-API erreichbar ist (siehe
+  // github.repo unten sowie syncChangelogFromGitHub() in script.js).
+  // Die Werte hier dienen nur als Fallback, falls die API nicht
+  // erreichbar ist.
   download: {
     version: "1.7.0",
-    fileName: "TasteJumpGame.exe",
-    filePath: "downloads/TasteJumpGame.exe",
-    fileSizeMB: 73,
+    fileName: "Platformer3D-Windows.zip",
+    filePath: "https://github.com/ITasteI/platformer3d/releases/download/v1.7.0/Platformer3D-Windows.zip",
+    fileSizeMB: 45,
     releaseDate: "2026-07-07",
     platform: "Windows 10/11 (64-bit)"
   },
