@@ -12,6 +12,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   renderHero();
   renderDownload();
+  renderLauncherDownload();
   renderGallery();
   renderAbout();
   renderStats();
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLightbox();
 
   syncChangelogFromGitHub();
+  syncLauncherFromGitHub();
   syncContentFromGitHub();
 
   // Zusätzliche automatische Prüfung, falls die Seite lange geöffnet
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2 Stunden erneut bei GitHub nachsehen, ob es neue Releases gibt.
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
   setInterval(syncChangelogFromGitHub, TWO_HOURS_MS);
+  setInterval(syncLauncherFromGitHub, TWO_HOURS_MS);
 
   // Alle übrigen Inhalte (Spielerzahlen, Serverstatus, Texte, ...)
   // sollen sich "live" anfühlen -> öfter prüfen.
@@ -50,7 +53,7 @@ function renderHero() {
 }
 
 /* ---------------------------------------------------------
- * Download-Bereich
+ * Download-Bereich (direkter Download ohne Launcher)
  * ------------------------------------------------------- */
 function renderDownload() {
   const { download } = GAME_CONFIG;
@@ -61,11 +64,22 @@ function renderDownload() {
   setText('downloadDate', formatDate(download.releaseDate));
   setText('downloadPlatform', download.platform);
 
-  const link = download.filePath;
   const dlBtn = document.getElementById('downloadBtn');
-  const heroBtn = document.getElementById('heroDownloadBtn');
-  if (dlBtn) { dlBtn.href = link; }
-  if (heroBtn) { heroBtn.href = link; }
+  if (dlBtn) dlBtn.href = download.filePath;
+}
+
+/* ---------------------------------------------------------
+ * Launcher-Download (empfohlener Weg)
+ * ------------------------------------------------------- */
+function renderLauncherDownload() {
+  const { launcher } = GAME_CONFIG;
+  if (!launcher) return;
+
+  setText('launcherVersion', launcher.version);
+  setText('launcherSize', `${launcher.fileSizeMB} MB`);
+
+  const btn = document.getElementById('launcherBtn');
+  if (btn) btn.href = launcher.filePath;
 }
 
 /* ---------------------------------------------------------
@@ -364,9 +378,47 @@ function parseReleaseBody(body) {
 }
 
 /* ---------------------------------------------------------
- * Live-Daten (Spielerzahlen & Serverstatus) aus live-data.json
- * im Website-Repo laden — dort direkt auf github.com bearbeitbar,
- * ganz ohne Website neu hochzuladen.
+ * Launcher-Download automatisch vom neuesten Release des
+ * Launcher-Repos übernehmen (Version, Dateiname, Größe, Link).
+ * ------------------------------------------------------- */
+async function syncLauncherFromGitHub() {
+  const { github } = GAME_CONFIG;
+  if (!github || !github.launcherRepo) return;
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${github.launcherRepo}/releases?per_page=5`, {
+      headers: { Accept: 'application/vnd.github+json' }
+    });
+    if (!res.ok) throw new Error(`GitHub API antwortete mit ${res.status}`);
+
+    const releases = await res.json();
+    const published = releases
+      .filter(r => !r.draft)
+      .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+    if (published.length === 0) return;
+
+    const latest = published[0];
+    const asset = latest.assets && latest.assets.find(a => a.name.endsWith('.exe'))
+      || (latest.assets && latest.assets[0]);
+    if (!asset) return;
+
+    GAME_CONFIG.launcher = {
+      version: parseSemver(latest.tag_name).raw,
+      fileName: asset.name,
+      filePath: asset.browser_download_url,
+      fileSizeMB: Math.round(asset.size / (1024 * 1024))
+    };
+
+    renderLauncherDownload();
+  } catch (err) {
+    console.warn('Launcher-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
+  }
+}
+
+/* ---------------------------------------------------------
+ * Alle übrigen Inhalte (Spielinfos, Screenshots, Footer, ...)
+ * aus content.json im Website-Repo laden — dort direkt auf
+ * github.com bearbeitbar, ganz ohne Website neu hochzuladen.
  * ------------------------------------------------------- */
 async function syncContentFromGitHub() {
   const { content } = GAME_CONFIG;

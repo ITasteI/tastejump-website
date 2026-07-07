@@ -51,11 +51,24 @@ const GAME_CONFIG = {
     platform: "Windows 10/11 (64-bit)"
   },
 
-  // ---------- GitHub-Anbindung: Changelog ----------
-  // Wird genutzt, um den Changelog sowie die aktuelle Versionsnummer
-  // automatisch mit den Tags/Releases des GitHub-Repos abzugleichen.
+  // ---------- Launcher-Download ----------
+  // Fallback, falls die Launcher-Release-API nicht erreichbar ist.
+  // Wird automatisch durch das neueste Release von github.launcherRepo
+  // überschrieben (siehe syncChangelogFromGitHub() in script.js).
+  launcher: {
+    version: "1.0.0",
+    fileName: "Platformer3DLauncher.exe",
+    filePath: "https://github.com/ITasteI/taste-launcher/releases/download/v1.0.0/Platformer3DLauncher.exe",
+    fileSizeMB: 155
+  },
+
+  // ---------- GitHub-Anbindung: Changelog & Downloads ----------
+  // Wird genutzt, um den Changelog sowie die aktuellen Downloads
+  // (Spiel + Launcher) automatisch mit den Releases der jeweiligen
+  // GitHub-Repos abzugleichen.
   github: {
     repo: "ITasteI/platformer3d",
+    launcherRepo: "ITasteI/taste-launcher",
     autoSyncChangelog: true
   },
 
