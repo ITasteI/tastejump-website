@@ -54,12 +54,14 @@ const GAME_CONFIG = {
   // ---------- Launcher-Download ----------
   // Fallback, falls die Launcher-Release-API nicht erreichbar ist.
   // Wird automatisch durch das neueste Release von github.launcherRepo
-  // überschrieben (siehe syncChangelogFromGitHub() in script.js).
+  // überschrieben (siehe syncLauncherFromGitHub() in script.js). Dies
+  // ist der EINZIGE Download-Weg auf der Website (installiert das
+  // Spiel automatisch, keine separate Zip-Datei mehr).
   launcher: {
-    version: "1.0.0",
-    fileName: "Platformer3DLauncher.exe",
-    filePath: "https://github.com/ITasteI/taste-launcher/releases/download/v1.0.0/Platformer3DLauncher.exe",
-    fileSizeMB: 155
+    version: "1.1.0",
+    fileName: "TasteGameLauncher.exe",
+    filePath: "https://github.com/ITasteI/taste-launcher/releases/download/v1.1.0/TasteGameLauncher.exe",
+    fileSizeMB: 85
   },
 
   // ---------- GitHub-Anbindung: Changelog & Downloads ----------

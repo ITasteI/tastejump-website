@@ -11,7 +11,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   renderHero();
-  renderDownload();
   renderLauncherDownload();
   renderGallery();
   renderAbout();
@@ -50,22 +49,6 @@ function renderHero() {
   setText('heroTagline', game.tagline);
   setText('heroVersion', download.version);
   setText('heroPlatform', download.platform);
-}
-
-/* ---------------------------------------------------------
- * Download-Bereich (direkter Download ohne Launcher)
- * ------------------------------------------------------- */
-function renderDownload() {
-  const { download } = GAME_CONFIG;
-
-  setText('downloadFileName', download.fileName);
-  setText('downloadVersion', download.version);
-  setText('downloadSize', `${download.fileSizeMB} MB`);
-  setText('downloadDate', formatDate(download.releaseDate));
-  setText('downloadPlatform', download.platform);
-
-  const dlBtn = document.getElementById('downloadBtn');
-  if (dlBtn) dlBtn.href = download.filePath;
 }
 
 /* ---------------------------------------------------------
@@ -324,18 +307,8 @@ async function syncChangelogFromGitHub() {
     // Download-Datei direkt vom GitHub-Release-Asset übernehmen (kein
     // manuelles Hochladen/Aktualisieren mehr nötig — die Website zeigt
     // automatisch immer die neueste, vom Spiel-Repo veröffentlichte Datei).
-    const latestRelease = published[0];
-    const asset = latestRelease.assets && latestRelease.assets.find(a => a.name.endsWith('.zip'))
-      || (latestRelease.assets && latestRelease.assets[0]);
-    if (asset) {
-      GAME_CONFIG.download.fileName = asset.name;
-      GAME_CONFIG.download.filePath = asset.browser_download_url;
-      GAME_CONFIG.download.fileSizeMB = Math.round(asset.size / (1024 * 1024));
-    }
-
     renderChangelog();
     renderHero();
-    renderDownload();
   } catch (err) {
     // Fallback-Daten aus config.js bleiben unverändert sichtbar.
     console.warn('GitHub-Changelog-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
@@ -439,7 +412,6 @@ async function syncContentFromGitHub() {
     if (data.footer) GAME_CONFIG.footer = data.footer;
 
     renderHero();
-    renderDownload();
     renderGallery();
     renderAbout();
     renderStats();

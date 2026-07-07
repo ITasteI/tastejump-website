@@ -338,17 +338,6 @@ main, header, footer { position: relative; z-index: 1; }
   overflow: hidden;
 }
 
-.download-card-alt {
-  margin-top: 20px;
-  padding: 32px 48px;
-  background: transparent;
-}
-.download-card-alt .file-badge {
-  color: var(--text-low);
-  background: var(--surface);
-  border-color: var(--border);
-}
-.download-card-alt h3 { font-size: 1.15rem; }
 .download-card::before {
   content: '';
   position: absolute; inset: 0;

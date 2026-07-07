@@ -16,10 +16,10 @@
   },
 
   "launcher": {
-    "version": "1.0.0",
-    "fileName": "Platformer3DLauncher.exe",
-    "filePath": "https://github.com/ITasteI/taste-launcher/releases/download/v1.0.0/Platformer3DLauncher.exe",
-    "fileSizeMB": 155
+    "version": "1.1.0",
+    "fileName": "TasteGameLauncher.exe",
+    "filePath": "https://github.com/ITasteI/taste-launcher/releases/download/v1.1.0/TasteGameLauncher.exe",
+    "fileSizeMB": 85
   },
 
   "stats": {
