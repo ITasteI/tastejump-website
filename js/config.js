@@ -37,7 +37,7 @@ const GAME_CONFIG = {
   // syncChangelogFromGitHub() in script.js). Die Werte hier dienen
   // nur als Fallback, falls die API nicht erreichbar ist.
   download: {
-    version: "1.5.0",
+    version: "1.7.0",
     fileName: "TasteJumpGame.exe",
     filePath: "downloads/TasteJumpGame.exe",
     fileSizeMB: 73,
@@ -95,6 +95,36 @@ const GAME_CONFIG = {
   // von github.com/ITasteI/platformer3d ersetzt (siehe script.js).
   // Neueste Einträge zuerst.
   changelog: [
+    {
+      version: "1.7.0",
+      date: "2026-07-07",
+      type: "feature",
+      changes: [
+        "Alter Turm erreichte nur ~240m – Eiswelt und Weltraumwelt waren dadurch nie erreichbar",
+        "Plattformenzahl von 160 auf 550 erhöht – Turm ist jetzt ca. 2.5x so hoch (~600m)",
+        "Jede der 5 Welten bekommt ein spürbares eigenes Stück Aufstieg",
+        "Neu: schwebende Themen-Inseln pro Welt (Vulkangestein, Wolken-Puffs, Eiskristalle, Asteroiden)"
+      ]
+    },
+    {
+      version: "1.6.1",
+      date: "2026-07-07",
+      type: "fix",
+      changes: [
+        "Einfrieren nach \"Neu starten\" behoben – Lauf wird jetzt direkt zurückgesetzt statt die Szene neu zu laden"
+      ]
+    },
+    {
+      version: "1.6.0",
+      date: "2026-07-07",
+      type: "feature",
+      changes: [
+        "Berge sind jetzt gezackte Gebirgszüge mit Nebengipfeln und Schneekappen",
+        "Nebel-Sichtweite deutlich erhöht – Berge verschwinden nicht mehr im grauen Dunst",
+        "Neu: gewundener Fluss mit Wasserfall und Nebel-Partikeleffekt",
+        "Plattformen bleiben bunt (Kenney-Farbpalette)"
+      ]
+    },
     {
       version: "1.5.0",
       date: "2026-07-07",
