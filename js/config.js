@@ -45,7 +45,7 @@ const GAME_CONFIG = {
     platform: "Windows 10/11 (64-bit)"
   },
 
-  // ---------- GitHub-Anbindung ----------
+  // ---------- GitHub-Anbindung: Changelog ----------
   // Wird genutzt, um den Changelog sowie die aktuelle Versionsnummer
   // automatisch mit den Tags/Releases des GitHub-Repos abzugleichen.
   github: {
@@ -53,9 +53,27 @@ const GAME_CONFIG = {
     autoSyncChangelog: true
   },
 
+  // ---------- GitHub-Anbindung: Live-Daten ----------
+  // Spielerzahlen & Serverstatus werden aus live-data.json im
+  // Website-Repo geladen (siehe syncLiveDataFromGitHub() in script.js).
+  //
+  // WICHTIG: Um Spielerzahlen oder Serverstatus zu ändern, musst du
+  // NICHT die Website neu hochladen! Öffne stattdessen direkt im
+  // Browser:
+  //   https://github.com/ITasteI/tastejump-website/blob/main/live-data.json
+  // Klicke auf das Stift-Symbol (Bearbeiten), ändere die Werte,
+  // dann unten auf "Commit changes" klicken. Die Website zieht sich
+  // die neuen Werte automatisch (spätestens alle 60 Sekunden, bei
+  // jedem Seitenaufruf sowieso).
+  liveData: {
+    repo: "ITasteI/tastejump-website",
+    branch: "main",
+    path: "live-data.json",
+    autoSync: true
+  },
+
   // ---------- Spielerstatistiken (Platzhalter) ----------
-  // Später kann hier stattdessen ein API-Call eingebunden werden,
-  // z.B. über loadLiveData() in script.js.
+  // FALLBACK, falls live-data.json nicht erreichbar ist.
   stats: {
     playersOnline: 0,
     playersToday: 0,
@@ -64,6 +82,7 @@ const GAME_CONFIG = {
   },
 
   // ---------- Serverstatus ----------
+  // FALLBACK, falls live-data.json nicht erreichbar ist.
   server: {
     // mögliche Werte: "online", "offline", "maintenance"
     status: "online",
