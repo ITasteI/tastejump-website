@@ -1,59 +1,49 @@
 {
-  "game": {
-    "name": "TasteJump",
-    "tagline": "Spring, renn und entdecke eine Welt voller Farbe und Chaos.",
-    "description": "TasteJump ist ein schneller 3D-Plattformer, in dem Präzision, Timing und Erkundungsdrang belohnt werden. Hüpfe durch handgefertigte Welten, sammle Geheimnisse und meistere waghalsige Sprungpassagen – allein oder gemeinsam mit Freunden im Koop-Modus.",
-    "icon": "assets/img/icon.jpg"
-  },
-
-  "download": {
-    "version": "1.7.0",
-    "fileName": "Platformer3D-Windows.zip",
-    "filePath": "https://github.com/ITasteI/platformer3d/releases/download/v1.7.0/Platformer3D-Windows.zip",
-    "fileSizeMB": 45,
-    "releaseDate": "2026-07-07",
-    "platform": "Windows 10/11 (64-bit)"
+  "studio": {
+    "name": "TasteGames",
+    "tagline": "One Launcher. Multiple Games.",
+    "description": "TasteGames ist ein Indie-Game-Studio, das mehrere Spiele entwickelt und diese über einen gemeinsamen Launcher bereitstellt. Ein Konto, eine App, eure ganze Spielebibliothek.",
+    "logo": "assets/img/icon.jpg"
   },
 
   "launcher": {
-    "version": "1.1.0",
-    "fileName": "TasteGameLauncher.exe",
-    "filePath": "https://github.com/ITasteI/taste-launcher/releases/download/v1.1.0/TasteGameLauncher.exe",
-    "fileSizeMB": 85
-  },
-
-  "stats": {
-    "playersOnline": 2,
-    "playersToday": 26,
-    "playersTotal": 41,
-    "playersPeak": 7
-  },
-
-  "server": {
-    "status": "online",
-    "lastChecked": "2026-07-08"
-  },
-
-  "about": {
+    "version": "1.2.1",
+    "fileName": "TasteGames.Launcher.exe",
+    "filePath": "https://github.com/ITasteI/taste-launcher/releases/download/v1.2.1/TasteGames.Launcher.exe",
+    "fileSizeMB": 85,
     "features": [
-      { "icon": "🏃", "title": "Präzises Movement", "text": "Reaktionsschnelle Steuerung mit Wandsprung, Dash und Doppelsprung." },
-      { "icon": "🌍", "title": "Handgefertigte Welten", "text": "Mehrere thematisch einzigartige Level voller Geheimnisse." },
-      { "icon": "👥", "title": "Multiplayer", "text": "Spiele kooperativ mit Freunden über Netcode-Unterstützung." },
-      { "icon": "🏆", "title": "Sammelobjekte", "text": "Finde versteckte Collectibles und schalte Bonusinhalte frei." },
-      { "icon": "🎨", "title": "Einzigartiger Look", "text": "Stilisierte Grafik mit modernem Beleuchtungssystem (URP)." },
-      { "icon": "🎵", "title": "Dynamischer Soundtrack", "text": "Musik, die sich an das Spielgeschehen anpasst." }
-    ],
-    "playtime": "4–6 Stunden Hauptgeschichte",
-    "multiplayer": "Bis zu 4 Spieler (Koop)",
-    "worlds": [
-      { "name": "Grüne Ebenen", "description": "Der Einstieg – sanfte Hügel und erste Sprungrätsel." },
-      { "name": "Stadt der Wolken", "description": "Schwebende Plattformen hoch über einer Metropole." },
-      { "name": "Verlassene Ruinen", "description": "Alte Tempelanlagen mit tückischen Fallen." }
+      { "icon": "🎮", "title": "Alle Spiele an einem Ort", "text": "Deine komplette TasteGames-Bibliothek in einer einzigen App." },
+      { "icon": "🔄", "title": "Automatische Updates", "text": "Neue Versionen werden automatisch erkannt und installiert." },
+      { "icon": "⚡", "title": "Einfache Installation", "text": "Ein Klick genügt – kein manuelles Entpacken mehr nötig." },
+      { "icon": "🚀", "title": "Schnelle Downloads", "text": "Optimierte Downloads direkt von GitHub-Releases." },
+      { "icon": "📚", "title": "Zentrale Spielebibliothek", "text": "Übersicht über installierte, verfügbare und kommende Titel." },
+      { "icon": "🔮", "title": "Zukunftssicher", "text": "Neue TasteGames-Titel erscheinen automatisch in deiner Bibliothek." }
     ]
   },
 
-  "screenshots": [
-    { "src": "assets/screenshots/screenshot1.png", "alt": "Spielszene aus TasteJump" }
+  "games": [
+    {
+      "id": "tastejump",
+      "name": "TasteJump",
+      "status": "available",
+      "tagline": "Spring, renn und entdecke eine Welt voller Farbe und Chaos.",
+      "shortDescription": "Ein schneller 3D-Plattformer mit fünf handgefertigten Welten, fairen Sprüngen und Koop-Multiplayer.",
+      "icon": "assets/img/icon.jpg",
+      "banner": "assets/screenshots/screenshot1.png",
+      "detailUrl": "games/tastejump.html",
+      "githubRepo": "ITasteI/platformer3d"
+    },
+    {
+      "id": "tasteshoot",
+      "name": "TasteShoot",
+      "status": "coming-soon",
+      "tagline": "Ein rasanter Shooter von TasteGames – bald verfügbar.",
+      "shortDescription": "Schnelle Runden, stilisierte Optik, Koop & Competitive – aktuell in Entwicklung.",
+      "icon": null,
+      "banner": null,
+      "detailUrl": "games/tasteshoot.html",
+      "githubRepo": null
+    }
   ],
 
   "footer": {
@@ -65,6 +55,6 @@
       "instagram": "#",
       "tiktok": "#"
     },
-    "copyrightName": "TasteJump Studio"
+    "copyrightName": "TasteGames"
   }
 }

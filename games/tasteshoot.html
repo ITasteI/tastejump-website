@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TasteShoot – Coming Soon | TasteGames</title>
+  <meta name="description" content="TasteShoot ist der kommende Shooter von TasteGames – aktuell in Entwicklung." />
+  <meta name="theme-color" content="#0b0c15" />
+  <meta name="robots" content="noindex" />
+
+  <link rel="canonical" href="https://taste-games.de/games/tasteshoot.html" />
+  <link rel="icon" type="image/jpeg" href="../assets/img/icon.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="../assets/img/icon.jpg" />
+  <link rel="apple-touch-icon" href="../assets/img/icon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- Analytics: GoatCounter (datenschutzfreundlich, kein Cookie-Banner nötig) -->
+  <script data-goatcounter="https://tastegame.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <header class="site-header" id="siteHeader">
+    <nav class="nav container">
+      <a href="../index.html" class="brand">
+        <img src="../assets/img/icon.jpg" alt="TasteGames Logo" class="brand-icon" />
+        <span class="brand-name">TasteGames</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html#games">Alle Spiele</a></li>
+        <li><a href="../index.html#launcher" class="nav-cta">Launcher</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="error-page">
+    <span class="game-status-badge coming-soon" style="position:static; margin-bottom: 24px;">Coming Soon</span>
+    <h1 class="hero-title" style="font-size: clamp(2.5rem, 8vw, 5rem);">
+      <span class="gradient-text">TasteShoot</span>
+    </h1>
+    <p class="error-text">Ein rasanter Shooter von TasteGames – schnelle Runden, stilisierte Optik, Koop &amp; Competitive. Aktuell in Entwicklung, folgt bald über den TasteGames Launcher.</p>
+    <a href="../index.html#games" class="btn btn-primary btn-lg">Zurück zu allen Spielen</a>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <p>&copy; <span id="footerYear"></span> TasteGames. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

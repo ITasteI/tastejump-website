@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TasteJump – Ein Spiel von TasteGames | 3D-Plattformer</title>
+  <meta name="description" content="TasteJump ist ein schneller 3D-Plattformer von TasteGames voller handgefertigter Welten, Geheimnisse und Koop-Multiplayer. Über den TasteGames Launcher spielen." />
+  <meta name="theme-color" content="#0b0c15" />
+
+  <!-- Open Graph / Social Preview -->
+  <meta property="og:title" content="TasteJump – Ein Spiel von TasteGames" />
+  <meta property="og:description" content="Spring, renn und entdecke eine Welt voller Farbe und Chaos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://taste-games.de/games/tastejump.html" />
+  <meta property="og:image" content="https://taste-games.de/assets/img/icon.jpg" />
+  <link rel="canonical" href="https://taste-games.de/games/tastejump.html" />
+
+  <link rel="icon" type="image/jpeg" href="../assets/img/icon.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="../assets/img/icon.jpg" />
+  <link rel="apple-touch-icon" href="../assets/img/icon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- Analytics: GoatCounter (datenschutzfreundlich, kein Cookie-Banner nötig) -->
+  <script data-goatcounter="https://tastegame.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+  <!-- ===================== Hintergrund-Effekte ===================== -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- ===================== Header / Navigation ===================== -->
+  <header class="site-header" id="siteHeader">
+    <nav class="nav container">
+      <a href="../index.html" class="brand">
+        <img src="../assets/img/icon.jpg" alt="TasteGames Logo" class="brand-icon" id="brandIcon" />
+        <span class="brand-name" id="brandName">TasteGames</span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#games">Alle Spiele</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+        <li><a href="#about">Über das Spiel</a></li>
+        <li><a href="#stats">Statistiken</a></li>
+        <li><a href="#changelog">Changelog</a></li>
+        <li><a href="../index.html#launcher" class="nav-cta" data-goatcounter-click="nav-download">Spielen</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- ===================== Hero ===================== -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <span class="tag-pill">🎮 Ein Spiel von TasteGames</span>
+        <h1 class="hero-title">
+          <span class="gradient-text">TasteJump</span>
+        </h1>
+        <p class="hero-tagline" id="heroTagline">Spring, renn und entdecke eine Welt voller Farbe und Chaos.</p>
+
+        <div class="hero-actions">
+          <a href="../index.html#launcher" class="btn btn-primary btn-lg" data-goatcounter-click="download-hero">
+            <span class="btn-icon">⬇</span> Über den Launcher spielen
+          </a>
+          <a href="#about" class="btn btn-ghost btn-lg">Mehr erfahren</a>
+        </div>
+
+        <div class="hero-meta">
+          <span class="version-chip">Version <strong id="heroVersion">–</strong></span>
+          <span class="dot-sep">•</span>
+          <span>Windows 10/11</span>
+        </div>
+      </div>
+
+      <div class="hero-scroll-hint" aria-hidden="true">
+        <span></span>
+      </div>
+    </section>
+
+    <!-- ===================== Screenshots ===================== -->
+    <section class="section" id="screenshots">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Galerie</span>
+          <h2>Screenshots</h2>
+          <p class="section-sub">Ein Blick in die Welten von TasteJump.</p>
+        </div>
+
+        <div class="gallery" id="galleryGrid">
+          <!-- wird dynamisch via tastejump-script.js befüllt -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox für Screenshots -->
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">✕</button>
+      <img src="" alt="" id="lightboxImg" />
+    </div>
+
+    <!-- ===================== Über das Spiel ===================== -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Über das Spiel</span>
+          <h2>Was ist TasteJump?</h2>
+          <p class="section-sub" id="aboutDescription"></p>
+        </div>
+
+        <div class="feature-grid" id="featureGrid">
+          <!-- wird dynamisch befüllt -->
+        </div>
+
+        <div class="about-meta-grid">
+          <div class="about-meta-card">
+            <span class="meta-icon">⏱</span>
+            <h4>Spielzeit</h4>
+            <p id="aboutPlaytime">–</p>
+          </div>
+          <div class="about-meta-card">
+            <span class="meta-icon">🕹</span>
+            <h4>Multiplayer</h4>
+            <p id="aboutMultiplayer">–</p>
+          </div>
+          <div class="about-meta-card about-meta-worlds">
+            <span class="meta-icon">🗺</span>
+            <h4>Weltenübersicht</h4>
+            <ul id="aboutWorlds"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Statistiken & Serverstatus ===================== -->
+    <section class="section" id="stats">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Live</span>
+          <h2>Spielerstatistiken</h2>
+          <p class="section-sub">Aktuelle Werte für TasteJump.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value" id="statOnline">–</span>
+            <span class="stat-label">Spieler online</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statToday">–</span>
+            <span class="stat-label">Spieler heute</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statTotal">–</span>
+            <span class="stat-label">Gesamtspieler</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="statPeak">–</span>
+            <span class="stat-label">Rekordspielerzahl</span>
+          </div>
+        </div>
+
+        <div class="server-status-card">
+          <span class="status-dot" id="serverStatusDot"></span>
+          <div class="server-status-text">
+            <strong id="serverStatusLabel">Serverstatus wird geladen…</strong>
+            <span id="serverStatusChecked" class="server-status-sub"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Changelog ===================== -->
+    <section class="section" id="changelog">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-kicker">Updates</span>
+          <h2>Changelog</h2>
+          <p class="section-sub">Alle Versionen, Bugfixes und neuen Inhalte im Überblick.</p>
+        </div>
+
+        <div class="changelog-list" id="changelogList">
+          <!-- wird dynamisch befüllt -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== Footer ===================== -->
+  <footer class="site-footer" id="footer-contact">
+    <div class="container footer-grid">
+
+      <div class="footer-col footer-brand">
+        <div class="brand">
+          <img src="../assets/img/icon.jpg" alt="TasteGames Logo" class="brand-icon" id="footerBrandIcon" />
+          <span class="brand-name" id="footerBrandName">TasteGames</span>
+        </div>
+        <p>TasteJump ist eines der Spiele von TasteGames – gebaut aus Leidenschaft am Genre.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <p><a id="footerEmail" href="#">kontakt@example.com</a></p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Discord</h4>
+        <p>Tritt der Community bei, teile Feedback und finde Mitspieler.</p>
+        <a href="#" id="footerDiscord" class="btn btn-discord" target="_blank" rel="noopener">Discord beitreten</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Social Media</h4>
+        <div class="social-links">
+          <a href="#" id="socialTwitter" aria-label="Twitter / X" target="_blank" rel="noopener">𝕏</a>
+          <a href="#" id="socialYoutube" aria-label="YouTube" target="_blank" rel="noopener">▶</a>
+          <a href="#" id="socialInstagram" aria-label="Instagram" target="_blank" rel="noopener">◎</a>
+          <a href="#" id="socialTiktok" aria-label="TikTok" target="_blank" rel="noopener">♪</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; <span id="footerYear"></span> <span id="footerCopyrightName">TasteGames</span>. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <script src="tastejump-config.js"></script>
+  <script src="tastejump-script.js"></script>
+</body>
+</html>

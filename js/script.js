@@ -1,212 +1,147 @@
 /**
  * ============================================================
- *  TasteJump — Website Logik
+ *  TasteGames — Startseiten-Logik
  * ============================================================
- * Liest alle Inhalte aus GAME_CONFIG und rendert sie in die
- * entsprechenden DOM-Elemente. GAME_CONFIG kommt zunächst aus
+ * Liest alle Inhalte aus STUDIO_CONFIG und rendert sie in die
+ * entsprechenden DOM-Elemente. STUDIO_CONFIG kommt zunächst aus
  * config.js (Fallback) und wird dann per syncContentFromGitHub()
  * live durch content.json aus dem Website-Repo überschrieben.
+ *
+ * Für die Spiele-Detailseiten (z.B. games/tastejump.html) gibt es
+ * eigene Skripte (siehe games/*.js) — diese Datei ist nur für die
+ * Studio-Startseite zuständig.
  * ============================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  renderBrand();
   renderHero();
+  renderGamesGrid();
+  renderLauncherFeatures();
   renderLauncherDownload();
-  renderGallery();
   renderAbout();
-  renderStats();
-  renderServerStatus();
-  renderChangelog();
   renderFooter();
 
   initHeaderScroll();
   initMobileNav();
-  initLightbox();
 
-  syncChangelogFromGitHub();
   syncLauncherFromGitHub();
   syncContentFromGitHub();
+  syncNewsFromGitHub();
 
   // Zusätzliche automatische Prüfung, falls die Seite lange geöffnet
-  // bleibt (z.B. ein Browser-Tab, der nicht neu geladen wird): alle
-  // 2 Stunden erneut bei GitHub nachsehen, ob es neue Releases gibt.
+  // bleibt (z.B. ein Browser-Tab, der nicht neu geladen wird).
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
-  setInterval(syncChangelogFromGitHub, TWO_HOURS_MS);
   setInterval(syncLauncherFromGitHub, TWO_HOURS_MS);
+  setInterval(syncNewsFromGitHub, TWO_HOURS_MS);
 
-  // Alle übrigen Inhalte (Spielerzahlen, Serverstatus, Texte, ...)
-  // sollen sich "live" anfühlen -> öfter prüfen.
   const ONE_MINUTE_MS = 60 * 1000;
   setInterval(syncContentFromGitHub, ONE_MINUTE_MS);
 });
 
 /* ---------------------------------------------------------
- * Hero
+ * Marke (Logo/Name im Header & Footer)
  * ------------------------------------------------------- */
-function renderHero() {
-  const { game, download } = GAME_CONFIG;
-  document.title = `${game.name} – Offizielle Spielseite | 3D-Plattformer`;
-  setText('heroTagline', game.tagline);
-  setText('heroVersion', download.version);
-  setText('heroPlatform', download.platform);
+function renderBrand() {
+  const { studio } = STUDIO_CONFIG;
+  setText('brandName', studio.name);
+  setText('footerBrandName', studio.name);
+  const brandIcon = document.getElementById('brandIcon');
+  const footerIcon = document.getElementById('footerBrandIcon');
+  if (brandIcon) brandIcon.src = studio.logo;
+  if (footerIcon) footerIcon.src = studio.logo;
 }
 
 /* ---------------------------------------------------------
- * Launcher-Download (empfohlener Weg)
+ * Hero
+ * ------------------------------------------------------- */
+function renderHero() {
+  const { studio } = STUDIO_CONFIG;
+  document.title = `${studio.name} – ${studio.tagline}`;
+  setText('heroBrandName', studio.name);
+  setText('heroTagline', studio.tagline);
+}
+
+/* ---------------------------------------------------------
+ * Games-Übersicht
+ * ------------------------------------------------------- */
+function renderGamesGrid() {
+  const grid = document.getElementById('gamesGrid');
+  if (!grid) return;
+
+  const games = STUDIO_CONFIG.games || [];
+
+  grid.innerHTML = games.map(game => {
+    const isAvailable = game.status === 'available';
+    const banner = game.banner
+      ? `<img src="${game.banner}" alt="${escapeHtml(game.name)}" loading="lazy" />`
+      : `<div class="game-card-banner-placeholder">${escapeHtml(game.name)}</div>`;
+    const badge = isAvailable
+      ? '<span class="game-status-badge available">Verfügbar</span>'
+      : '<span class="game-status-badge coming-soon">Coming Soon</span>';
+    const ctaHref = game.detailUrl || '#';
+    const ctaLabel = isAvailable ? 'Mehr erfahren' : 'Bald verfügbar';
+    const ctaClass = isAvailable ? 'btn btn-primary' : 'btn btn-ghost';
+    const ctaAttrs = isAvailable ? '' : 'aria-disabled="true"';
+
+    return `
+      <div class="game-card">
+        <div class="game-card-banner">${banner}${badge}</div>
+        <div class="game-card-body">
+          <h3>${escapeHtml(game.name)}</h3>
+          <p class="game-card-tagline">${escapeHtml(game.tagline)}</p>
+          <p class="game-card-desc">${escapeHtml(game.shortDescription || '')}</p>
+          <a href="${ctaHref}" class="${ctaClass}" ${ctaAttrs} data-goatcounter-click="game-${escapeHtml(game.id)}">${ctaLabel}</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ---------------------------------------------------------
+ * Launcher: Feature-Grid
+ * ------------------------------------------------------- */
+function renderLauncherFeatures() {
+  const grid = document.getElementById('launcherFeatureGrid');
+  if (!grid) return;
+
+  const features = STUDIO_CONFIG.launcher.features || [];
+  grid.innerHTML = features.map(f => `
+    <div class="feature-card">
+      <span class="f-icon">${f.icon}</span>
+      <h3>${escapeHtml(f.title)}</h3>
+      <p>${escapeHtml(f.text)}</p>
+    </div>
+  `).join('');
+}
+
+/* ---------------------------------------------------------
+ * Launcher-Download
  * ------------------------------------------------------- */
 function renderLauncherDownload() {
-  const { launcher } = GAME_CONFIG;
+  const { launcher } = STUDIO_CONFIG;
   if (!launcher) return;
 
   setText('launcherVersion', launcher.version);
   setText('launcherSize', `${launcher.fileSizeMB} MB`);
+  setText('heroLauncherVersion', launcher.version);
 
   const btn = document.getElementById('launcherBtn');
   if (btn) btn.href = launcher.filePath;
 }
 
 /* ---------------------------------------------------------
- * Screenshot-Galerie
- * ------------------------------------------------------- */
-function renderGallery() {
-  const grid = document.getElementById('galleryGrid');
-  if (!grid) return;
-
-  const shots = GAME_CONFIG.screenshots || [];
-
-  if (shots.length === 0) {
-    grid.innerHTML = '<p style="color:var(--text-low)">Noch keine Screenshots hinterlegt.</p>';
-    return;
-  }
-
-  grid.innerHTML = shots.map((shot, i) => `
-    <div class="gallery-item" data-index="${i}">
-      <img src="${shot.src}" alt="${escapeHtml(shot.alt || 'Screenshot')}" loading="lazy" />
-    </div>
-  `).join('');
-}
-
-/* ---------------------------------------------------------
- * Lightbox für Screenshots
- * ------------------------------------------------------- */
-function initLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const closeBtn = document.getElementById('lightboxClose');
-  if (!lightbox || !lightboxImg) return;
-
-  document.getElementById('galleryGrid')?.addEventListener('click', (e) => {
-    const item = e.target.closest('.gallery-item');
-    if (!item) return;
-    const index = Number(item.dataset.index);
-    const shot = GAME_CONFIG.screenshots[index];
-    if (!shot) return;
-    lightboxImg.src = shot.src;
-    lightboxImg.alt = shot.alt || '';
-    lightbox.classList.add('active');
-  });
-
-  const close = () => lightbox.classList.remove('active');
-  closeBtn?.addEventListener('click', close);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) close();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
-  });
-}
-
-/* ---------------------------------------------------------
- * Über das Spiel
+ * About
  * ------------------------------------------------------- */
 function renderAbout() {
-  const { about, game } = GAME_CONFIG;
-
-  setText('aboutDescription', game.description);
-  setText('aboutPlaytime', about.playtime);
-  setText('aboutMultiplayer', about.multiplayer);
-
-  const featureGrid = document.getElementById('featureGrid');
-  if (featureGrid) {
-    featureGrid.innerHTML = about.features.map(f => `
-      <div class="feature-card">
-        <span class="f-icon">${f.icon}</span>
-        <h3>${escapeHtml(f.title)}</h3>
-        <p>${escapeHtml(f.text)}</p>
-      </div>
-    `).join('');
-  }
-
-  const worldsList = document.getElementById('aboutWorlds');
-  if (worldsList) {
-    worldsList.innerHTML = about.worlds.map(w => `
-      <li><strong>${escapeHtml(w.name)}</strong> — ${escapeHtml(w.description)}</li>
-    `).join('');
-  }
-}
-
-/* ---------------------------------------------------------
- * Spielerstatistiken
- * ------------------------------------------------------- */
-function renderStats() {
-  const { stats } = GAME_CONFIG;
-  setText('statOnline', formatNumber(stats.playersOnline));
-  setText('statToday', formatNumber(stats.playersToday));
-  setText('statTotal', formatNumber(stats.playersTotal));
-  setText('statPeak', formatNumber(stats.playersPeak));
-}
-
-/* ---------------------------------------------------------
- * Serverstatus
- * ------------------------------------------------------- */
-function renderServerStatus() {
-  const { server } = GAME_CONFIG;
-  const dot = document.getElementById('serverStatusDot');
-  const label = document.getElementById('serverStatusLabel');
-  const checked = document.getElementById('serverStatusChecked');
-
-  const statusMap = {
-    online: 'Server Online',
-    offline: 'Server Offline',
-    maintenance: 'Wartungsarbeiten'
-  };
-
-  if (dot) dot.className = `status-dot ${server.status}`;
-  setText('serverStatusLabel', statusMap[server.status] || 'Status unbekannt');
-  if (checked) checked.textContent = `Zuletzt geprüft: ${server.lastChecked}`;
-}
-
-/* ---------------------------------------------------------
- * Changelog
- * ------------------------------------------------------- */
-function renderChangelog() {
-  const list = document.getElementById('changelogList');
-  if (!list) return;
-
-  const badgeLabels = { release: 'Release', feature: 'Neu', fix: 'Bugfix' };
-
-  list.innerHTML = GAME_CONFIG.changelog.map(entry => `
-    <div class="changelog-entry">
-      <div class="changelog-version">
-        <span class="v">v${escapeHtml(entry.version)}</span>
-        <span class="d">${formatDate(entry.date)}</span>
-        <span class="changelog-badge ${entry.type}">${badgeLabels[entry.type] || entry.type}</span>
-      </div>
-      <ul class="changelog-changes">
-        ${entry.changes.map(c => typeof c === 'object'
-          ? `<li class="changelog-section-title">${escapeHtml(c.text)}</li>`
-          : `<li>${escapeHtml(c)}</li>`
-        ).join('')}
-      </ul>
-    </div>
-  `).join('');
+  setText('aboutDescription', STUDIO_CONFIG.studio.description);
 }
 
 /* ---------------------------------------------------------
  * Footer
  * ------------------------------------------------------- */
 function renderFooter() {
-  const { footer } = GAME_CONFIG;
+  const { footer } = STUDIO_CONFIG;
 
   const emailEl = document.getElementById('footerEmail');
   if (emailEl) {
@@ -264,55 +199,171 @@ function initMobileNav() {
 }
 
 /* ---------------------------------------------------------
- * GitHub-Sync: Changelog & Versionsnummer automatisch von
- * github.com/<repo>/tags bzw. /releases übernehmen.
- * ------------------------------------------------------- *
- * Läuft bei jedem Seitenaufruf im Browser. Schlägt der Abruf
- * fehl (offline, API-Limit, CORS), bleiben die Fallback-Daten
- * aus config.js sichtbar – die Seite bricht nie.
+ * Launcher-Download automatisch vom neuesten Release des
+ * Launcher-Repos übernehmen (Version, Dateiname, Größe, Link).
  * ------------------------------------------------------- */
-async function syncChangelogFromGitHub() {
-  const { github } = GAME_CONFIG;
-  if (!github || !github.autoSyncChangelog || !github.repo) return;
+async function syncLauncherFromGitHub() {
+  const { github } = STUDIO_CONFIG;
+  if (!github || !github.launcherRepo) return;
 
   try {
-    const res = await fetch(`https://api.github.com/repos/${github.repo}/releases?per_page=30`, {
+    const res = await fetch(`https://api.github.com/repos/${github.launcherRepo}/releases?per_page=5`, {
       headers: { Accept: 'application/vnd.github+json' }
     });
     if (!res.ok) throw new Error(`GitHub API antwortete mit ${res.status}`);
 
     const releases = await res.json();
-    if (!Array.isArray(releases) || releases.length === 0) return;
-
-    // Nur veröffentlichte, nicht-Draft-Releases verwenden, neueste zuerst.
     const published = releases
       .filter(r => !r.draft)
       .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
     if (published.length === 0) return;
 
-    const versions = published.map(r => parseSemver(r.tag_name));
+    const latest = published[0];
+    const asset = latest.assets && latest.assets.find(a => a.name.endsWith('.exe'))
+      || (latest.assets && latest.assets[0]);
+    if (!asset) return;
 
-    GAME_CONFIG.changelog = published.map((release, i) => ({
-      version: versions[i].raw,
-      date: release.published_at ? release.published_at.slice(0, 10) : '',
-      type: classifyRelease(versions[i], versions[i + 1]),
-      changes: parseReleaseBody(release.body)
+    STUDIO_CONFIG.launcher.version = parseSemver(latest.tag_name).raw;
+    STUDIO_CONFIG.launcher.fileName = asset.name;
+    STUDIO_CONFIG.launcher.filePath = asset.browser_download_url;
+    STUDIO_CONFIG.launcher.fileSizeMB = Math.round(asset.size / (1024 * 1024));
+
+    renderLauncherDownload();
+  } catch (err) {
+    console.warn('Launcher-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
+  }
+}
+
+/* ---------------------------------------------------------
+ * News: Releases aus allen Spiele-Repos + Launcher-Repo laden,
+ * zusammenführen und nach Datum sortiert anzeigen.
+ * ------------------------------------------------------- */
+async function syncNewsFromGitHub() {
+  const sources = [];
+  if (STUDIO_CONFIG.github && STUDIO_CONFIG.github.launcherRepo) {
+    sources.push({ repo: STUDIO_CONFIG.github.launcherRepo, label: 'Launcher' });
+  }
+  for (const game of STUDIO_CONFIG.games || []) {
+    if (game.githubRepo) sources.push({ repo: game.githubRepo, label: game.name });
+  }
+  if (sources.length === 0) return;
+
+  try {
+    const results = await Promise.all(sources.map(async (src) => {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${src.repo}/releases?per_page=10`, {
+          headers: { Accept: 'application/vnd.github+json' }
+        });
+        if (!res.ok) return [];
+        const releases = await res.json();
+        return releases
+          .filter(r => !r.draft)
+          .map(r => ({ ...r, _label: src.label }));
+      } catch {
+        return [];
+      }
     }));
 
-    // Aktuelle Version an der neuesten Release ausrichten.
-    const latest = versions[0];
-    GAME_CONFIG.download.version = latest.raw;
-    GAME_CONFIG.download.releaseDate = GAME_CONFIG.changelog[0].date || GAME_CONFIG.download.releaseDate;
+    // Badge-Typ (Release/Neu/Bugfix) je Quelle einzeln berechnen —
+    // jede Quelle hat ihre eigene Versionszählung, ein Vergleich über
+    // Quellen hinweg (z.B. TasteJump v1.6.0 gegen Launcher v1.2.1)
+    // ergäbe keinen sinnvollen Versionssprung.
+    const entriesBySource = results.flatMap(releases => {
+      const sorted = [...releases].sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+      const versions = sorted.map(r => parseSemver(r.tag_name));
+      return sorted.map((release, i) => ({
+        label: release._label,
+        version: versions[i].raw,
+        date: release.published_at ? release.published_at.slice(0, 10) : '',
+        type: classifyRelease(versions[i], versions[i + 1]),
+        changes: parseReleaseBody(release.body),
+        _publishedAt: release.published_at
+      }));
+    });
 
-    // Download-Datei direkt vom GitHub-Release-Asset übernehmen (kein
-    // manuelles Hochladen/Aktualisieren mehr nötig — die Website zeigt
-    // automatisch immer die neueste, vom Spiel-Repo veröffentlichte Datei).
-    renderChangelog();
+    const entries = entriesBySource
+      .sort((a, b) => new Date(b._publishedAt) - new Date(a._publishedAt))
+      .slice(0, 12);
+
+    if (entries.length === 0) return;
+
+    renderNews(entries);
+  } catch (err) {
+    console.warn('News-Sync fehlgeschlagen:', err);
+  }
+}
+
+function renderNews(entries) {
+  const list = document.getElementById('newsList');
+  if (!list) return;
+
+  const badgeLabels = { release: 'Release', feature: 'Neu', fix: 'Bugfix' };
+
+  list.innerHTML = entries.map(entry => `
+    <div class="changelog-entry">
+      <div class="changelog-version">
+        <span class="news-source">${escapeHtml(entry.label)}</span>
+        <span class="v">v${escapeHtml(entry.version)}</span>
+        <span class="d">${formatDate(entry.date)}</span>
+        <span class="changelog-badge ${entry.type}">${badgeLabels[entry.type] || entry.type}</span>
+      </div>
+      <ul class="changelog-changes">
+        ${entry.changes.map(c => typeof c === 'object'
+          ? `<li class="changelog-section-title">${escapeHtml(c.text)}</li>`
+          : `<li>${escapeHtml(c)}</li>`
+        ).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+/* ---------------------------------------------------------
+ * Alle übrigen Inhalte (Studio, Launcher, Spieleliste, Footer)
+ * aus content.json im Website-Repo laden — dort direkt auf
+ * github.com bearbeitbar, ganz ohne Website neu hochzuladen.
+ * ------------------------------------------------------- */
+async function syncContentFromGitHub() {
+  const { content } = STUDIO_CONFIG;
+  if (!content || !content.autoSync || !content.repo) return;
+
+  try {
+    const url = `https://raw.githubusercontent.com/${content.repo}/${content.branch}/${content.path}?t=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`GitHub antwortete mit ${res.status}`);
+
+    const data = await res.json();
+    if (data.studio) STUDIO_CONFIG.studio = data.studio;
+    if (data.games) STUDIO_CONFIG.games = data.games;
+    if (data.footer) STUDIO_CONFIG.footer = data.footer;
+    // Launcher-Basisdaten aus content.json übernehmen, aber Live-Werte
+    // von syncLauncherFromGitHub() (Version/Größe/Link) nicht verlieren.
+    // Nur bekannte Felder übernehmen und dabei bereits live von GitHub
+    // synchronisierte Werte (version/fileName/filePath/fileSizeMB aus
+    // syncLauncherFromGitHub) nicht mit älteren content.json-Werten
+    // überschreiben. Fehlt ein Feld (z.B. "features") in content.json,
+    // bleibt der bisherige Wert erhalten statt zu verschwinden.
+    if (data.launcher) {
+      Object.assign(STUDIO_CONFIG.launcher, data.launcher, pickDefined(STUDIO_CONFIG.launcher, ['version', 'fileName', 'filePath', 'fileSizeMB']));
+    }
+
+    renderBrand();
     renderHero();
+    renderGamesGrid();
+    renderLauncherFeatures();
+    renderLauncherDownload();
+    renderAbout();
+    renderFooter();
   } catch (err) {
     // Fallback-Daten aus config.js bleiben unverändert sichtbar.
-    console.warn('GitHub-Changelog-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
+    console.warn('Content-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
   }
+}
+
+/** Übernimmt aus `source` nur die angegebenen Keys (für Merge-Zwecke). */
+function pickDefined(source, keys) {
+  const out = {};
+  for (const k of keys) if (source && source[k] !== undefined) out[k] = source[k];
+  return out;
 }
 
 /** Zerlegt einen Tag-Namen wie "v1.4.1" in vergleichbare Zahlen. */
@@ -322,7 +373,7 @@ function parseSemver(tagName) {
   return { raw, major, minor, patch };
 }
 
-/** Leitet aus dem Versionssprung zum Vorgänger einen Changelog-Badge-Typ ab. */
+/** Leitet aus dem Versionssprung zum Vorgänger einen Badge-Typ ab. */
 function classifyRelease(current, previous) {
   if (!previous) return 'release';
   if (current.major > previous.major) return 'release';
@@ -348,79 +399,6 @@ function parseReleaseBody(body) {
   }
 
   return changes.length ? changes : ['Keine Details angegeben.'];
-}
-
-/* ---------------------------------------------------------
- * Launcher-Download automatisch vom neuesten Release des
- * Launcher-Repos übernehmen (Version, Dateiname, Größe, Link).
- * ------------------------------------------------------- */
-async function syncLauncherFromGitHub() {
-  const { github } = GAME_CONFIG;
-  if (!github || !github.launcherRepo) return;
-
-  try {
-    const res = await fetch(`https://api.github.com/repos/${github.launcherRepo}/releases?per_page=5`, {
-      headers: { Accept: 'application/vnd.github+json' }
-    });
-    if (!res.ok) throw new Error(`GitHub API antwortete mit ${res.status}`);
-
-    const releases = await res.json();
-    const published = releases
-      .filter(r => !r.draft)
-      .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-    if (published.length === 0) return;
-
-    const latest = published[0];
-    const asset = latest.assets && latest.assets.find(a => a.name.endsWith('.exe'))
-      || (latest.assets && latest.assets[0]);
-    if (!asset) return;
-
-    GAME_CONFIG.launcher = {
-      version: parseSemver(latest.tag_name).raw,
-      fileName: asset.name,
-      filePath: asset.browser_download_url,
-      fileSizeMB: Math.round(asset.size / (1024 * 1024))
-    };
-
-    renderLauncherDownload();
-  } catch (err) {
-    console.warn('Launcher-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
-  }
-}
-
-/* ---------------------------------------------------------
- * Alle übrigen Inhalte (Spielinfos, Screenshots, Footer, ...)
- * aus content.json im Website-Repo laden — dort direkt auf
- * github.com bearbeitbar, ganz ohne Website neu hochzuladen.
- * ------------------------------------------------------- */
-async function syncContentFromGitHub() {
-  const { content } = GAME_CONFIG;
-  if (!content || !content.autoSync || !content.repo) return;
-
-  try {
-    const url = `https://raw.githubusercontent.com/${content.repo}/${content.branch}/${content.path}?t=${Date.now()}`;
-    const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`GitHub antwortete mit ${res.status}`);
-
-    const data = await res.json();
-    if (data.game) GAME_CONFIG.game = data.game;
-    if (data.download) GAME_CONFIG.download = data.download;
-    if (data.stats) GAME_CONFIG.stats = data.stats;
-    if (data.server) GAME_CONFIG.server = data.server;
-    if (data.about) GAME_CONFIG.about = data.about;
-    if (data.screenshots) GAME_CONFIG.screenshots = data.screenshots;
-    if (data.footer) GAME_CONFIG.footer = data.footer;
-
-    renderHero();
-    renderGallery();
-    renderAbout();
-    renderStats();
-    renderServerStatus();
-    renderFooter();
-  } catch (err) {
-    // Fallback-Daten aus config.js bleiben unverändert sichtbar.
-    console.warn('Content-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
-  }
 }
 
 /* ---------------------------------------------------------
