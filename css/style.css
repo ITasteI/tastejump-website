@@ -244,6 +244,8 @@ main, header, footer { position: relative; z-index: 1; }
   flex-direction: column;
   align-items: center;
   animation: heroIn 1s var(--ease) both;
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes heroIn {
@@ -308,6 +310,7 @@ main, header, footer { position: relative; z-index: 1; }
   width: 26px; height: 42px;
   border: 2px solid var(--border);
   border-radius: 20px;
+  z-index: 1;
 }
 .hero-scroll-hint span {
   position: absolute;
@@ -719,6 +722,111 @@ main, header, footer { position: relative; z-index: 1; }
   text-align: center;
   font-size: 0.85rem;
   color: var(--text-low);
+}
+
+/* ---------- Individueller Cursor ---------- */
+.custom-cursor-active,
+.custom-cursor-active a,
+.custom-cursor-active button {
+  cursor: none;
+}
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 300;
+  transition: opacity .2s ease;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--accent-2);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 1.5px solid rgba(0, 229, 199, 0.5);
+  transition: width .25s var(--ease), height .25s var(--ease), margin .25s var(--ease), border-color .25s var(--ease), opacity .2s ease;
+}
+.cursor-ring.cursor-ring-hover {
+  width: 56px; height: 56px;
+  margin: -28px 0 0 -28px;
+  border-color: var(--accent);
+  background: rgba(124, 92, 255, 0.08);
+}
+.cursor-dot.cursor-dot-hover { background: var(--accent); }
+
+/* ---------- Magnetische Buttons & Tilt-Karten ---------- */
+.btn-primary, .btn-ghost, .btn-discord {
+  transition: transform .2s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+}
+.game-card, .feature-card {
+  transition: transform .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+  will-change: transform;
+}
+
+/* ---------- Hero-Partikel ---------- */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ---------- Scroll-Reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal.in-view { opacity: 1; transform: none; }
+.reveal-1 { transition-delay: .08s; }
+.reveal-2 { transition-delay: .16s; }
+.reveal-3 { transition-delay: .24s; }
+.reveal-4 { transition-delay: .32s; }
+.reveal-5 { transition-delay: .4s; }
+.reveal-6 { transition-delay: .48s; }
+
+/* ---------- Nav Scrollspy ---------- */
+.nav-links a.nav-active:not(.nav-cta) { color: var(--text-hi); }
+.nav-links a.nav-active:not(.nav-cta)::after { width: 100%; }
+
+/* ---------- News-Ticker ---------- */
+.ticker {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+.ticker-track {
+  display: inline-flex;
+  animation: tickerScroll 28s linear infinite;
+}
+.ticker-track span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-mid);
+  padding: 14px 28px;
+  text-transform: uppercase;
+}
+.ticker-track span::before { content: '✦'; color: var(--accent-2); }
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
 }
 
 /* ---------- Fehlerseiten (404, Coming Soon) ---------- */

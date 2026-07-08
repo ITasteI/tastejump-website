@@ -61,10 +61,12 @@ function renderGallery() {
   }
 
   grid.innerHTML = shots.map((shot, i) => `
-    <div class="gallery-item" data-index="${i}">
+    <div class="gallery-item reveal reveal-${Math.min(i + 1, 6)}" data-index="${i}">
       <img src="${shot.src}" alt="${escapeHtml(shot.alt || 'Screenshot')}" loading="lazy" />
     </div>
   `).join('');
+
+  if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
 
 /* ---------------------------------------------------------
@@ -109,8 +111,8 @@ function renderAbout() {
 
   const featureGrid = document.getElementById('featureGrid');
   if (featureGrid) {
-    featureGrid.innerHTML = about.features.map(f => `
-      <div class="feature-card">
+    featureGrid.innerHTML = about.features.map((f, i) => `
+      <div class="feature-card reveal reveal-${Math.min(i + 1, 6)}">
         <span class="f-icon">${f.icon}</span>
         <h3>${escapeHtml(f.title)}</h3>
         <p>${escapeHtml(f.text)}</p>
@@ -124,6 +126,8 @@ function renderAbout() {
       <li><strong>${escapeHtml(w.name)}</strong> — ${escapeHtml(w.description)}</li>
     `).join('');
   }
+
+  if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
 
 /* ---------------------------------------------------------
@@ -131,10 +135,18 @@ function renderAbout() {
  * ------------------------------------------------------- */
 function renderStats() {
   const { stats } = GAME_CONFIG;
-  setText('statOnline', formatNumber(stats.playersOnline));
-  setText('statToday', formatNumber(stats.playersToday));
-  setText('statTotal', formatNumber(stats.playersTotal));
-  setText('statPeak', formatNumber(stats.playersPeak));
+  const animate = typeof window.animateCountUp === 'function';
+  if (animate) {
+    window.animateCountUp(document.getElementById('statOnline'), stats.playersOnline);
+    window.animateCountUp(document.getElementById('statToday'), stats.playersToday);
+    window.animateCountUp(document.getElementById('statTotal'), stats.playersTotal);
+    window.animateCountUp(document.getElementById('statPeak'), stats.playersPeak);
+  } else {
+    setText('statOnline', formatNumber(stats.playersOnline));
+    setText('statToday', formatNumber(stats.playersToday));
+    setText('statTotal', formatNumber(stats.playersTotal));
+    setText('statPeak', formatNumber(stats.playersPeak));
+  }
 }
 
 /* ---------------------------------------------------------
@@ -165,8 +177,8 @@ function renderChangelog() {
 
   const badgeLabels = { release: 'Release', feature: 'Neu', fix: 'Bugfix' };
 
-  list.innerHTML = GAME_CONFIG.changelog.map(entry => `
-    <div class="changelog-entry">
+  list.innerHTML = GAME_CONFIG.changelog.map((entry, i) => `
+    <div class="changelog-entry reveal reveal-${Math.min(i + 1, 6)}">
       <div class="changelog-version">
         <span class="v">v${escapeHtml(entry.version)}</span>
         <span class="d">${formatDate(entry.date)}</span>
@@ -180,6 +192,8 @@ function renderChangelog() {
       </ul>
     </div>
   `).join('');
+
+  if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
 
 /* ---------------------------------------------------------

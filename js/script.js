@@ -71,7 +71,7 @@ function renderGamesGrid() {
 
   const games = STUDIO_CONFIG.games || [];
 
-  grid.innerHTML = games.map(game => {
+  grid.innerHTML = games.map((game, i) => {
     const isAvailable = game.status === 'available';
     const banner = game.banner
       ? `<img src="${game.banner}" alt="${escapeHtml(game.name)}" loading="lazy" />`
@@ -83,9 +83,10 @@ function renderGamesGrid() {
     const ctaLabel = isAvailable ? 'Mehr erfahren' : 'Bald verfügbar';
     const ctaClass = isAvailable ? 'btn btn-primary' : 'btn btn-ghost';
     const ctaAttrs = isAvailable ? '' : 'aria-disabled="true"';
+    const staggerClass = `reveal reveal-${Math.min(i + 1, 6)}`;
 
     return `
-      <div class="game-card">
+      <div class="game-card ${staggerClass}">
         <div class="game-card-banner">${banner}${badge}</div>
         <div class="game-card-body">
           <h3>${escapeHtml(game.name)}</h3>
@@ -96,6 +97,8 @@ function renderGamesGrid() {
       </div>
     `;
   }).join('');
+
+  if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
 
 /* ---------------------------------------------------------
@@ -106,13 +109,15 @@ function renderLauncherFeatures() {
   if (!grid) return;
 
   const features = STUDIO_CONFIG.launcher.features || [];
-  grid.innerHTML = features.map(f => `
-    <div class="feature-card">
+  grid.innerHTML = features.map((f, i) => `
+    <div class="feature-card reveal reveal-${Math.min(i + 1, 6)}">
       <span class="f-icon">${f.icon}</span>
       <h3>${escapeHtml(f.title)}</h3>
       <p>${escapeHtml(f.text)}</p>
     </div>
   `).join('');
+
+  if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
 
 /* ---------------------------------------------------------
@@ -299,8 +304,8 @@ function renderNews(entries) {
 
   const badgeLabels = { release: 'Release', feature: 'Neu', fix: 'Bugfix' };
 
-  list.innerHTML = entries.map(entry => `
-    <div class="changelog-entry">
+  list.innerHTML = entries.map((entry, i) => `
+    <div class="changelog-entry reveal reveal-${Math.min(i + 1, 6)}">
       <div class="changelog-version">
         <span class="news-source">${escapeHtml(entry.label)}</span>
         <span class="v">v${escapeHtml(entry.version)}</span>
@@ -315,6 +320,8 @@ function renderNews(entries) {
       </ul>
     </div>
   `).join('');
+
+  if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
 
 /* ---------------------------------------------------------
