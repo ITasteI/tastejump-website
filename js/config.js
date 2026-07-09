@@ -64,7 +64,7 @@ const STUDIO_CONFIG = {
       tagline: "Spring, renn und entdecke eine Welt voller Farbe und Chaos.",
       shortDescription: "Ein schneller 3D-Plattformer mit fünf handgefertigten Welten, fairen Sprüngen und Koop-Multiplayer.",
       icon: "assets/img/icon.jpg",
-      banner: "assets/screenshots/screenshot1.png",
+      banner: "assets/screenshots/screenshot-worldgate.jpg",
       detailUrl: "games/tastejump.html",
       githubRepo: "ITasteI/platformer3d"
     },

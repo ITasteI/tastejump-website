@@ -244,7 +244,11 @@ const GAME_CONFIG = {
 
   // ---------- Screenshots ----------
   screenshots: [
-    { src: "../assets/screenshots/screenshot1.png", alt: "Spielszene aus TasteJump" }
+    { src: "../assets/screenshots/screenshot-worldgate.jpg", alt: "Weltentor bei Nacht in TasteJump" },
+    { src: "../assets/screenshots/screenshot-meadow-night.jpg", alt: "Nächtliche Wiese mit leuchtenden Pilzen" },
+    { src: "../assets/screenshots/screenshot-forest-path.jpg", alt: "Waldpfad bei Nacht in TasteJump" },
+    { src: "../assets/screenshots/screenshot-character.jpg", alt: "Spielercharakter in TasteJump" },
+    { src: "../assets/screenshots/screenshot-shop.jpg", alt: "Shop mit Skins und Effekten in TasteJump" }
   ],
 
   // ---------- Footer / Kontakt ----------
