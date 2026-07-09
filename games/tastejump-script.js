@@ -62,7 +62,7 @@ function renderGallery() {
 
   grid.innerHTML = shots.map((shot, i) => `
     <div class="gallery-item reveal reveal-${Math.min(i + 1, 6)}" data-index="${i}">
-      <img src="${shot.src}" alt="${escapeHtml(shot.alt || 'Screenshot')}" loading="lazy" />
+      <img src="${shot.src}" alt="${escapeHtml(shot.alt || 'Screenshot')}" />
     </div>
   `).join('');
 

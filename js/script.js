@@ -74,7 +74,7 @@ function renderGamesGrid() {
   grid.innerHTML = games.map((game, i) => {
     const isAvailable = game.status === 'available';
     const banner = game.banner
-      ? `<img src="${game.banner}" alt="${escapeHtml(game.name)}" loading="lazy" />`
+      ? `<img src="${game.banner}" alt="${escapeHtml(game.name)}" />`
       : `<div class="game-card-banner-placeholder">${escapeHtml(game.name)}</div>`;
     const badge = isAvailable
       ? '<span class="game-status-badge available">Verfügbar</span>'
