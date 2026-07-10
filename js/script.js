@@ -7,6 +7,10 @@
  * config.js (Fallback) und wird dann per syncContentFromGitHub()
  * live durch content.json aus dem Website-Repo überschrieben.
  *
+ * Mehrsprachige Felder (Taglines, Beschreibungen, Feature-Texte)
+ * werden über I18N.pick() ausgelesen (siehe js/i18n.js). Bei
+ * Sprachwechsel ("i18n:change") wird alles neu gerendert.
+ *
  * Für die Spiele-Detailseiten (z.B. games/tastejump.html) gibt es
  * eigene Skripte (siehe games/*.js) — diese Datei ist nur für die
  * Studio-Startseite zuständig.
@@ -14,13 +18,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderBrand();
-  renderHero();
-  renderGamesGrid();
-  renderLauncherFeatures();
-  renderLauncherDownload();
-  renderAbout();
-  renderFooter();
+  renderAll();
 
   initHeaderScroll();
   initMobileNav();
@@ -28,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   syncLauncherFromGitHub();
   syncContentFromGitHub();
   syncNewsFromGitHub();
+
+  window.addEventListener('i18n:change', renderAll);
 
   // Zusätzliche automatische Prüfung, falls die Seite lange geöffnet
   // bleibt (z.B. ein Browser-Tab, der nicht neu geladen wird).
@@ -38,6 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const ONE_MINUTE_MS = 60 * 1000;
   setInterval(syncContentFromGitHub, ONE_MINUTE_MS);
 });
+
+function renderAll() {
+  renderBrand();
+  renderHero();
+  renderGamesGrid();
+  renderLauncherFeatures();
+  renderLauncherDownload();
+  renderAbout();
+  renderFooter();
+}
 
 /* ---------------------------------------------------------
  * Marke (Logo/Name im Header & Footer)
@@ -77,10 +87,10 @@ function renderGamesGrid() {
       ? `<img src="${game.banner}" alt="${escapeHtml(game.name)}" />`
       : `<div class="game-card-banner-placeholder">${escapeHtml(game.name)}</div>`;
     const badge = isAvailable
-      ? '<span class="game-status-badge available">Verfügbar</span>'
-      : '<span class="game-status-badge coming-soon">Coming Soon</span>';
+      ? `<span class="game-status-badge available">${I18N.t('games.badgeAvailable')}</span>`
+      : `<span class="game-status-badge coming-soon">${I18N.t('games.badgeComingSoon')}</span>`;
     const ctaHref = game.detailUrl || '#';
-    const ctaLabel = isAvailable ? 'Mehr erfahren' : 'Bald verfügbar';
+    const ctaLabel = isAvailable ? I18N.t('games.ctaLearnMore') : I18N.t('games.ctaComingSoon');
     const ctaClass = isAvailable ? 'btn btn-primary' : 'btn btn-ghost';
     const ctaAttrs = isAvailable ? '' : 'aria-disabled="true"';
     const staggerClass = `reveal reveal-${Math.min(i + 1, 6)}`;
@@ -90,8 +100,8 @@ function renderGamesGrid() {
         <div class="game-card-banner">${banner}${badge}</div>
         <div class="game-card-body">
           <h3>${escapeHtml(game.name)}</h3>
-          <p class="game-card-tagline">${escapeHtml(game.tagline)}</p>
-          <p class="game-card-desc">${escapeHtml(game.shortDescription || '')}</p>
+          <p class="game-card-tagline">${escapeHtml(I18N.pick(game.tagline))}</p>
+          <p class="game-card-desc">${escapeHtml(I18N.pick(game.shortDescription) || '')}</p>
           <a href="${ctaHref}" class="${ctaClass}" ${ctaAttrs} data-goatcounter-click="game-${escapeHtml(game.id)}">${ctaLabel}</a>
         </div>
       </div>
@@ -112,8 +122,8 @@ function renderLauncherFeatures() {
   grid.innerHTML = features.map((f, i) => `
     <div class="feature-card reveal reveal-${Math.min(i + 1, 6)}">
       <span class="f-icon">${f.icon}</span>
-      <h3>${escapeHtml(f.title)}</h3>
-      <p>${escapeHtml(f.text)}</p>
+      <h3>${escapeHtml(I18N.pick(f.title))}</h3>
+      <p>${escapeHtml(I18N.pick(f.text))}</p>
     </div>
   `).join('');
 
@@ -139,7 +149,7 @@ function renderLauncherDownload() {
  * About
  * ------------------------------------------------------- */
 function renderAbout() {
-  setText('aboutDescription', STUDIO_CONFIG.studio.description);
+  setText('aboutDescription', I18N.pick(STUDIO_CONFIG.studio.description));
 }
 
 /* ---------------------------------------------------------
@@ -292,6 +302,7 @@ async function syncNewsFromGitHub() {
 
     if (entries.length === 0) return;
 
+    window._lastNewsEntries = entries;
     renderNews(entries);
   } catch (err) {
     console.warn('News-Sync fehlgeschlagen:', err);
@@ -302,7 +313,7 @@ function renderNews(entries) {
   const list = document.getElementById('newsList');
   if (!list) return;
 
-  const badgeLabels = { release: 'Release', feature: 'Neu', fix: 'Bugfix' };
+  const badgeLabels = { release: I18N.t('changelog.badgeRelease'), feature: I18N.t('changelog.badgeFeature'), fix: I18N.t('changelog.badgeFix') };
 
   list.innerHTML = entries.map((entry, i) => `
     <div class="changelog-entry reveal reveal-${Math.min(i + 1, 6)}">
@@ -323,6 +334,12 @@ function renderNews(entries) {
 
   if (window.reinitScrollReveal) window.reinitScrollReveal();
 }
+
+// News neu rendern bei Sprachwechsel (Badge-Labels/Datumsformat), ohne
+// erneut bei GitHub abzufragen — nutzt die zuletzt geladenen Einträge.
+window.addEventListener('i18n:change', () => {
+  if (window._lastNewsEntries) renderNews(window._lastNewsEntries);
+});
 
 /* ---------------------------------------------------------
  * Alle übrigen Inhalte (Studio, Launcher, Spieleliste, Footer)
@@ -353,13 +370,7 @@ async function syncContentFromGitHub() {
       Object.assign(STUDIO_CONFIG.launcher, data.launcher, pickDefined(STUDIO_CONFIG.launcher, ['version', 'fileName', 'filePath', 'fileSizeMB']));
     }
 
-    renderBrand();
-    renderHero();
-    renderGamesGrid();
-    renderLauncherFeatures();
-    renderLauncherDownload();
-    renderAbout();
-    renderFooter();
+    renderAll();
   } catch (err) {
     // Fallback-Daten aus config.js bleiben unverändert sichtbar.
     console.warn('Content-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
@@ -390,7 +401,7 @@ function classifyRelease(current, previous) {
 
 /** Wandelt den Markdown-Release-Text in eine flache Liste von Änderungen um. */
 function parseReleaseBody(body) {
-  if (!body) return ['Keine Details angegeben.'];
+  if (!body) return [I18N.t('changelog.noDetails')];
 
   const lines = body.split('\n').map(l => l.trim()).filter(Boolean);
   const changes = [];
@@ -405,7 +416,7 @@ function parseReleaseBody(body) {
     }
   }
 
-  return changes.length ? changes : ['Keine Details angegeben.'];
+  return changes.length ? changes : [I18N.t('changelog.noDetails')];
 }
 
 /* ---------------------------------------------------------
@@ -417,13 +428,13 @@ function setText(id, value) {
 }
 
 function formatNumber(n) {
-  return new Intl.NumberFormat('de-DE').format(n);
+  return new Intl.NumberFormat(I18N.locale()).format(n);
 }
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d)) return dateStr;
-  return new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: 'long', year: 'numeric' }).format(d);
+  return new Intl.DateTimeFormat(I18N.locale(), { day: '2-digit', month: 'long', year: 'numeric' }).format(d);
 }
 
 function escapeHtml(str) {

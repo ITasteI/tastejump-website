@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TasteShoot – Coming Soon | TasteGames</title>
-  <meta name="description" content="TasteShoot ist der kommende Shooter von TasteGames – aktuell in Entwicklung." />
+  <meta name="description" content="TasteShoot is the upcoming shooter from TasteGames — currently in development." />
   <meta name="theme-color" content="#0b0c15" />
   <meta name="robots" content="noindex" />
 
@@ -32,31 +32,32 @@
         <img src="../assets/img/icon.jpg" alt="TasteGames Logo" class="brand-icon" />
         <span class="brand-name">TasteGames</span>
       </a>
-      <ul class="nav-links">
-        <li><a href="../index.html#games">Alle Spiele</a></li>
-        <li><a href="../index.html#launcher" class="nav-cta">Launcher</a></li>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#games" data-i18n="nav.allGames">All Games</a></li>
+        <li><a href="../index.html#launcher" class="nav-cta" data-i18n="nav.launcher">Launcher</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="error-page reveal">
-    <span class="game-status-badge coming-soon" style="position:static; margin-bottom: 24px;">Coming Soon</span>
+    <span class="game-status-badge coming-soon" style="position:static; margin-bottom: 24px;" data-i18n="tasteshoot.badge">Coming Soon</span>
     <h1 class="hero-title" style="font-size: clamp(2.5rem, 8vw, 5rem);">
       <span class="gradient-text">TasteShoot</span>
     </h1>
-    <p class="error-text">Ein rasanter Shooter von TasteGames – schnelle Runden, stilisierte Optik, Koop &amp; Competitive. Aktuell in Entwicklung, folgt bald über den TasteGames Launcher.</p>
-    <a href="../index.html#games" class="btn btn-primary btn-lg">Zurück zu allen Spielen</a>
+    <p class="error-text" data-i18n="tasteshoot.description">A fast-paced shooter from TasteGames — quick rounds, stylized visuals, co-op & competitive. Currently in development, coming soon through the TasteGames Launcher.</p>
+    <a href="../index.html#games" class="btn btn-primary btn-lg" data-i18n="tasteshoot.backBtn">Back to all games</a>
   </main>
 
   <footer class="site-footer">
     <div class="footer-bottom">
-      <p>&copy; <span id="footerYear"></span> TasteGames. Alle Rechte vorbehalten.</p>
+      <p>&copy; <span id="footerYear"></span> TasteGames. <span data-i18n="footer.rightsReserved">All rights reserved.</span></p>
     </div>
   </footer>
 
   <script>
     document.getElementById('footerYear').textContent = new Date().getFullYear();
   </script>
+  <script src="../js/i18n.js"></script>
   <script src="../js/effects.js"></script>
 </body>
 </html>

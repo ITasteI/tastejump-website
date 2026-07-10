@@ -19,12 +19,14 @@ const GAME_CONFIG = {
   // ---------- Allgemeine Spielinformationen ----------
   game: {
     name: "TasteJump",
-    tagline: "Spring, renn und entdecke eine Welt voller Farbe und Chaos.",
-    description:
-      "TasteJump ist ein schneller 3D-Plattformer, in dem Präzision, Timing und " +
-      "Erkundungsdrang belohnt werden. Hüpfe durch handgefertigte Welten, sammle " +
-      "Geheimnisse und meistere waghalsige Sprungpassagen – allein oder gemeinsam " +
-      "mit Freunden im Koop-Modus.",
+    tagline: {
+      en: "Jump, run and discover a world full of color and chaos.",
+      de: "Spring, renn und entdecke eine Welt voller Farbe und Chaos."
+    },
+    description: {
+      en: "TasteJump is a fast-paced 3D platformer that rewards precision, timing and a thirst for exploration. Jump through handcrafted worlds, collect secrets and master daring platforming sequences — alone or together with friends in co-op.",
+      de: "TasteJump ist ein schneller 3D-Plattformer, in dem Präzision, Timing und Erkundungsdrang belohnt werden. Hüpfe durch handgefertigte Welten, sammle Geheimnisse und meistere waghalsige Sprungpassagen – allein oder gemeinsam mit Freunden im Koop-Modus."
+    },
     icon: "../assets/img/icon.jpg"
   },
 
@@ -74,19 +76,19 @@ const GAME_CONFIG = {
   // ---------- Über das Spiel ----------
   about: {
     features: [
-      { icon: "🏃", title: "Präzises Movement", text: "Reaktionsschnelle Steuerung mit Wandsprung, Dash und Doppelsprung." },
-      { icon: "🌍", title: "Handgefertigte Welten", text: "Mehrere thematisch einzigartige Level voller Geheimnisse." },
-      { icon: "👥", title: "Multiplayer", text: "Spiele kooperativ mit Freunden über Netcode-Unterstützung." },
-      { icon: "🏆", title: "Sammelobjekte", text: "Finde versteckte Collectibles und schalte Bonusinhalte frei." },
-      { icon: "🎨", title: "Einzigartiger Look", text: "Stilisierte Grafik mit modernem Beleuchtungssystem (URP)." },
-      { icon: "🎵", title: "Dynamischer Soundtrack", text: "Musik, die sich an das Spielgeschehen anpasst." }
+      { icon: "🏃", title: { en: "Precise movement", de: "Präzises Movement" }, text: { en: "Responsive controls with wall jump, dash and double jump.", de: "Reaktionsschnelle Steuerung mit Wandsprung, Dash und Doppelsprung." } },
+      { icon: "🌍", title: { en: "Handcrafted worlds", de: "Handgefertigte Welten" }, text: { en: "Several thematically unique levels full of secrets.", de: "Mehrere thematisch einzigartige Level voller Geheimnisse." } },
+      { icon: "👥", title: { en: "Multiplayer", de: "Multiplayer" }, text: { en: "Play cooperatively with friends over netcode support.", de: "Spiele kooperativ mit Freunden über Netcode-Unterstützung." } },
+      { icon: "🏆", title: { en: "Collectibles", de: "Sammelobjekte" }, text: { en: "Find hidden collectibles and unlock bonus content.", de: "Finde versteckte Collectibles und schalte Bonusinhalte frei." } },
+      { icon: "🎨", title: { en: "Distinct visual style", de: "Einzigartiger Look" }, text: { en: "Stylized visuals with a modern lighting system (URP).", de: "Stilisierte Grafik mit modernem Beleuchtungssystem (URP)." } },
+      { icon: "🎵", title: { en: "Dynamic soundtrack", de: "Dynamischer Soundtrack" }, text: { en: "Music that adapts to what's happening in the game.", de: "Musik, die sich an das Spielgeschehen anpasst." } }
     ],
-    playtime: "4–6 Stunden Hauptgeschichte",
-    multiplayer: "Bis zu 4 Spieler (Koop)",
+    playtime: { en: "4–6 hours main story", de: "4–6 Stunden Hauptgeschichte" },
+    multiplayer: { en: "Up to 4 players (co-op)", de: "Bis zu 4 Spieler (Koop)" },
     worlds: [
-      { name: "Grüne Ebenen", description: "Der Einstieg – sanfte Hügel und erste Sprungrätsel." },
-      { name: "Stadt der Wolken", description: "Schwebende Plattformen hoch über einer Metropole." },
-      { name: "Verlassene Ruinen", description: "Alte Tempelanlagen mit tückischen Fallen." }
+      { name: { en: "Green Plains", de: "Grüne Ebenen" }, description: { en: "The starting area — gentle hills and the first jump puzzles.", de: "Der Einstieg – sanfte Hügel und erste Sprungrätsel." } },
+      { name: { en: "Cloud City", de: "Stadt der Wolken" }, description: { en: "Floating platforms high above a metropolis.", de: "Schwebende Plattformen hoch über einer Metropole." } },
+      { name: { en: "Abandoned Ruins", de: "Verlassene Ruinen" }, description: { en: "Ancient temple grounds full of treacherous traps.", de: "Alte Tempelanlagen mit tückischen Fallen." } }
     ]
   },
 
@@ -244,11 +246,11 @@ const GAME_CONFIG = {
 
   // ---------- Screenshots ----------
   screenshots: [
-    { src: "../assets/screenshots/screenshot-worldgate.jpg", alt: "Weltentor bei Nacht in TasteJump" },
-    { src: "../assets/screenshots/screenshot-meadow-night.jpg", alt: "Nächtliche Wiese mit leuchtenden Pilzen" },
-    { src: "../assets/screenshots/screenshot-forest-path.jpg", alt: "Waldpfad bei Nacht in TasteJump" },
-    { src: "../assets/screenshots/screenshot-character.jpg", alt: "Spielercharakter in TasteJump" },
-    { src: "../assets/screenshots/screenshot-shop.jpg", alt: "Shop mit Skins und Effekten in TasteJump" }
+    { src: "../assets/screenshots/screenshot-worldgate.jpg", alt: { en: "World gate at night in TasteJump", de: "Weltentor bei Nacht in TasteJump" } },
+    { src: "../assets/screenshots/screenshot-meadow-night.jpg", alt: { en: "Nighttime meadow with glowing mushrooms", de: "Nächtliche Wiese mit leuchtenden Pilzen" } },
+    { src: "../assets/screenshots/screenshot-forest-path.jpg", alt: { en: "Forest path at night in TasteJump", de: "Waldpfad bei Nacht in TasteJump" } },
+    { src: "../assets/screenshots/screenshot-character.jpg", alt: { en: "Player character in TasteJump", de: "Spielercharakter in TasteJump" } },
+    { src: "../assets/screenshots/screenshot-shop.jpg", alt: { en: "Shop with skins and effects in TasteJump", de: "Shop mit Skins und Effekten in TasteJump" } }
   ],
 
   // ---------- Footer / Kontakt ----------

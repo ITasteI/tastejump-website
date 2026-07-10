@@ -15,6 +15,11 @@
  * Website lädt sich die neuen Werte automatisch, ganz ohne erneutes
  * Hochladen/Deploy.
  *
+ * Mehrsprachige Textfelder (Taglines, Beschreibungen, Feature-Texte)
+ * stehen als { "en": "...", "de": "..." } da — siehe js/i18n.js für
+ * das Übersetzungssystem. Eigennamen wie "TasteGames"/"TasteJump"
+ * bleiben einfache Strings, die brauchen keine Übersetzung.
+ *
  * Um ein neues Spiel hinzuzufügen: einfach einen weiteren Eintrag
  * im "games"-Array von content.json ergänzen (siehe dortige Struktur).
  * Für ein Spiel mit eigener Detailseite (Stats/Changelog/Screenshots)
@@ -29,7 +34,10 @@ const STUDIO_CONFIG = {
   studio: {
     name: "TasteGames",
     tagline: "One Launcher. Multiple Games.",
-    description: "TasteGames ist ein Indie-Game-Studio, das mehrere Spiele entwickelt und diese über einen gemeinsamen Launcher bereitstellt. Ein Konto, eine App, eure ganze Spielebibliothek.",
+    description: {
+      en: "TasteGames is an indie game studio building multiple games and delivering them through one shared launcher. One account, one app, your whole game library.",
+      de: "TasteGames ist ein Indie-Game-Studio, das mehrere Spiele entwickelt und diese über einen gemeinsamen Launcher bereitstellt. Ein Konto, eine App, eure ganze Spielebibliothek."
+    },
     logo: "assets/img/icon.jpg"
   },
 
@@ -43,12 +51,12 @@ const STUDIO_CONFIG = {
     filePath: "https://github.com/ITasteI/taste-launcher/releases/download/v1.2.1/TasteGames.Launcher.exe",
     fileSizeMB: 85,
     features: [
-      { icon: "🎮", title: "Alle Spiele an einem Ort", text: "Deine komplette TasteGames-Bibliothek in einer einzigen App." },
-      { icon: "🔄", title: "Automatische Updates", text: "Neue Versionen werden automatisch erkannt und installiert." },
-      { icon: "⚡", title: "Einfache Installation", text: "Ein Klick genügt – kein manuelles Entpacken mehr nötig." },
-      { icon: "🚀", title: "Schnelle Downloads", text: "Optimierte Downloads direkt von GitHub-Releases." },
-      { icon: "📚", title: "Zentrale Spielebibliothek", text: "Übersicht über installierte, verfügbare und kommende Titel." },
-      { icon: "🔮", title: "Zukunftssicher", text: "Neue TasteGames-Titel erscheinen automatisch in deiner Bibliothek." }
+      { icon: "🎮", title: { en: "All games in one place", de: "Alle Spiele an einem Ort" }, text: { en: "Your entire TasteGames library in a single app.", de: "Deine komplette TasteGames-Bibliothek in einer einzigen App." } },
+      { icon: "🔄", title: { en: "Automatic updates", de: "Automatische Updates" }, text: { en: "New versions are detected and installed automatically.", de: "Neue Versionen werden automatisch erkannt und installiert." } },
+      { icon: "⚡", title: { en: "Effortless install", de: "Einfache Installation" }, text: { en: "One click is all it takes — no more manual unpacking.", de: "Ein Klick genügt – kein manuelles Entpacken mehr nötig." } },
+      { icon: "🚀", title: { en: "Fast downloads", de: "Schnelle Downloads" }, text: { en: "Optimized downloads straight from GitHub releases.", de: "Optimierte Downloads direkt von GitHub-Releases." } },
+      { icon: "📚", title: { en: "Central game library", de: "Zentrale Spielebibliothek" }, text: { en: "An overview of installed, available and upcoming titles.", de: "Übersicht über installierte, verfügbare und kommende Titel." } },
+      { icon: "🔮", title: { en: "Built for the future", de: "Zukunftssicher" }, text: { en: "New TasteGames titles show up in your library automatically.", de: "Neue TasteGames-Titel erscheinen automatisch in deiner Bibliothek." } }
     ]
   },
 
@@ -61,8 +69,8 @@ const STUDIO_CONFIG = {
       id: "tastejump",
       name: "TasteJump",
       status: "available",
-      tagline: "Spring, renn und entdecke eine Welt voller Farbe und Chaos.",
-      shortDescription: "Ein schneller 3D-Plattformer mit fünf handgefertigten Welten, fairen Sprüngen und Koop-Multiplayer.",
+      tagline: { en: "Jump, run and discover a world full of color and chaos.", de: "Spring, renn und entdecke eine Welt voller Farbe und Chaos." },
+      shortDescription: { en: "A fast-paced 3D platformer with five handcrafted worlds, fair jumps and co-op multiplayer.", de: "Ein schneller 3D-Plattformer mit fünf handgefertigten Welten, fairen Sprüngen und Koop-Multiplayer." },
       icon: "assets/img/icon.jpg",
       banner: "assets/screenshots/screenshot-worldgate.jpg",
       detailUrl: "games/tastejump.html",
@@ -72,8 +80,8 @@ const STUDIO_CONFIG = {
       id: "tasteshoot",
       name: "TasteShoot",
       status: "coming-soon",
-      tagline: "Ein rasanter Shooter von TasteGames – bald verfügbar.",
-      shortDescription: "Schnelle Runden, stilisierte Optik, Koop & Competitive – aktuell in Entwicklung.",
+      tagline: { en: "A fast-paced shooter from TasteGames — coming soon.", de: "Ein rasanter Shooter von TasteGames – bald verfügbar." },
+      shortDescription: { en: "Quick rounds, stylized visuals, co-op & competitive — currently in development.", de: "Schnelle Runden, stilisierte Optik, Koop & Competitive – aktuell in Entwicklung." },
       icon: null,
       banner: null,
       detailUrl: "games/tasteshoot.html",

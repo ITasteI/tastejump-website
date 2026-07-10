@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seite nicht gefunden – TasteGames</title>
+  <title data-i18n="404.title">Page not found – TasteGames</title>
   <meta name="robots" content="noindex" />
   <link rel="icon" type="image/jpeg" href="assets/img/icon.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
@@ -20,10 +20,11 @@
   <main class="error-page reveal">
     <img src="assets/img/icon.jpg" alt="TasteGames Logo" style="width:72px;height:72px;border-radius:16px;margin-bottom:28px;box-shadow:0 8px 30px rgba(124,92,255,0.35);" />
     <div class="error-code">404</div>
-    <p class="error-text">Diese Seite gibt es nicht – vielleicht ist sie in eine andere Zone des Turms gesprungen.</p>
-    <a href="/" class="btn btn-primary btn-lg">Zurück zur Startseite</a>
+    <p class="error-text" data-i18n="404.text">This page doesn't exist — maybe it jumped into another zone of the tower.</p>
+    <a href="/" class="btn btn-primary btn-lg" data-i18n="404.backBtn">Back to homepage</a>
   </main>
 
+  <script src="js/i18n.js"></script>
   <script src="js/effects.js"></script>
 </body>
 </html>

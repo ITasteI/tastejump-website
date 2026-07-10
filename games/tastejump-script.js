@@ -8,17 +8,16 @@
  *  - games/tastejump-content.json (Spiel: Stats/Server/About/Screenshots)
  *  - content.json im Repo-Wurzelverzeichnis (Footer/Marke, Studio-weit)
  *  - GitHub-Releases von platformer3d (Changelog & Version)
+ *
+ * Mehrsprachige Felder werden über I18N.pick() ausgelesen (siehe
+ * js/i18n.js). Bei Sprachwechsel ("i18n:change") wird alles neu
+ * gerendert. Die Changelog-Einträge selbst (Release-Notes von
+ * GitHub) bleiben unübersetzt — das sind externe Freitexte.
  * ============================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderHero();
-  renderGallery();
-  renderAbout();
-  renderStats();
-  renderServerStatus();
-  renderChangelog();
-  renderFooter();
+  renderAll();
 
   initHeaderScroll();
   initMobileNav();
@@ -28,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   syncContentFromGitHub();
   syncStudioFooterFromGitHub();
 
+  window.addEventListener('i18n:change', renderAll);
+
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
   setInterval(syncChangelogFromGitHub, TWO_HOURS_MS);
 
@@ -36,13 +37,23 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(syncStudioFooterFromGitHub, ONE_MINUTE_MS);
 });
 
+function renderAll() {
+  renderHero();
+  renderGallery();
+  renderAbout();
+  renderStats();
+  renderServerStatus();
+  renderChangelog();
+  renderFooter();
+}
+
 /* ---------------------------------------------------------
  * Hero
  * ------------------------------------------------------- */
 function renderHero() {
   const { game } = GAME_CONFIG;
-  document.title = `${game.name} – Ein Spiel von TasteGames | 3D-Plattformer`;
-  setText('heroTagline', game.tagline);
+  document.title = `${game.name} – ${I18N.t('game.pageTitleSuffix')}`;
+  setText('heroTagline', I18N.pick(game.tagline));
   setText('heroVersion', (GAME_CONFIG.changelog[0] && GAME_CONFIG.changelog[0].version) || '–');
 }
 
@@ -56,13 +67,13 @@ function renderGallery() {
   const shots = GAME_CONFIG.screenshots || [];
 
   if (shots.length === 0) {
-    grid.innerHTML = '<p style="color:var(--text-low)">Noch keine Screenshots hinterlegt.</p>';
+    grid.innerHTML = `<p style="color:var(--text-low)">${I18N.t('screenshots.empty')}</p>`;
     return;
   }
 
   grid.innerHTML = shots.map((shot, i) => `
     <div class="gallery-item reveal reveal-${Math.min(i + 1, 6)}" data-index="${i}">
-      <img src="${shot.src}" alt="${escapeHtml(shot.alt || 'Screenshot')}" />
+      <img src="${shot.src}" alt="${escapeHtml(I18N.pick(shot.alt) || 'Screenshot')}" />
     </div>
   `).join('');
 
@@ -85,7 +96,7 @@ function initLightbox() {
     const shot = GAME_CONFIG.screenshots[index];
     if (!shot) return;
     lightboxImg.src = shot.src;
-    lightboxImg.alt = shot.alt || '';
+    lightboxImg.alt = I18N.pick(shot.alt) || '';
     lightbox.classList.add('active');
   });
 
@@ -105,17 +116,17 @@ function initLightbox() {
 function renderAbout() {
   const { about, game } = GAME_CONFIG;
 
-  setText('aboutDescription', game.description);
-  setText('aboutPlaytime', about.playtime);
-  setText('aboutMultiplayer', about.multiplayer);
+  setText('aboutDescription', I18N.pick(game.description));
+  setText('aboutPlaytime', I18N.pick(about.playtime));
+  setText('aboutMultiplayer', I18N.pick(about.multiplayer));
 
   const featureGrid = document.getElementById('featureGrid');
   if (featureGrid) {
     featureGrid.innerHTML = about.features.map((f, i) => `
       <div class="feature-card reveal reveal-${Math.min(i + 1, 6)}">
         <span class="f-icon">${f.icon}</span>
-        <h3>${escapeHtml(f.title)}</h3>
-        <p>${escapeHtml(f.text)}</p>
+        <h3>${escapeHtml(I18N.pick(f.title))}</h3>
+        <p>${escapeHtml(I18N.pick(f.text))}</p>
       </div>
     `).join('');
   }
@@ -123,7 +134,7 @@ function renderAbout() {
   const worldsList = document.getElementById('aboutWorlds');
   if (worldsList) {
     worldsList.innerHTML = about.worlds.map(w => `
-      <li><strong>${escapeHtml(w.name)}</strong> — ${escapeHtml(w.description)}</li>
+      <li><strong>${escapeHtml(I18N.pick(w.name))}</strong> — ${escapeHtml(I18N.pick(w.description))}</li>
     `).join('');
   }
 
@@ -157,15 +168,15 @@ function renderServerStatus() {
   const dot = document.getElementById('serverStatusDot');
 
   const statusMap = {
-    online: 'Server Online',
-    offline: 'Server Offline',
-    maintenance: 'Wartungsarbeiten'
+    online: I18N.t('server.online'),
+    offline: I18N.t('server.offline'),
+    maintenance: I18N.t('server.maintenance')
   };
 
   if (dot) dot.className = `status-dot ${server.status}`;
-  setText('serverStatusLabel', statusMap[server.status] || 'Status unbekannt');
+  setText('serverStatusLabel', statusMap[server.status] || I18N.t('server.unknown'));
   const checked = document.getElementById('serverStatusChecked');
-  if (checked) checked.textContent = `Zuletzt geprüft: ${server.lastChecked}`;
+  if (checked) checked.textContent = `${I18N.t('stats.lastChecked')} ${server.lastChecked}`;
 }
 
 /* ---------------------------------------------------------
@@ -175,7 +186,7 @@ function renderChangelog() {
   const list = document.getElementById('changelogList');
   if (!list) return;
 
-  const badgeLabels = { release: 'Release', feature: 'Neu', fix: 'Bugfix' };
+  const badgeLabels = { release: I18N.t('changelog.badgeRelease'), feature: I18N.t('changelog.badgeFeature'), fix: I18N.t('changelog.badgeFix') };
 
   list.innerHTML = GAME_CONFIG.changelog.map((entry, i) => `
     <div class="changelog-entry reveal reveal-${Math.min(i + 1, 6)}">
@@ -320,7 +331,7 @@ function classifyRelease(current, previous) {
 }
 
 function parseReleaseBody(body) {
-  if (!body) return ['Keine Details angegeben.'];
+  if (!body) return [I18N.t('changelog.noDetails')];
 
   const lines = body.split('\n').map(l => l.trim()).filter(Boolean);
   const changes = [];
@@ -335,7 +346,7 @@ function parseReleaseBody(body) {
     }
   }
 
-  return changes.length ? changes : ['Keine Details angegeben.'];
+  return changes.length ? changes : [I18N.t('changelog.noDetails')];
 }
 
 /* ---------------------------------------------------------
@@ -402,13 +413,13 @@ function setText(id, value) {
 }
 
 function formatNumber(n) {
-  return new Intl.NumberFormat('de-DE').format(n);
+  return new Intl.NumberFormat(I18N.locale()).format(n);
 }
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d)) return dateStr;
-  return new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: 'long', year: 'numeric' }).format(d);
+  return new Intl.DateTimeFormat(I18N.locale(), { day: '2-digit', month: 'long', year: 'numeric' }).format(d);
 }
 
 function escapeHtml(str) {

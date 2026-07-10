@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TasteGames – One Launcher. Multiple Games.</title>
-  <meta name="description" content="TasteGames ist ein Indie-Game-Studio. Alle Spiele – wie TasteJump – über einen gemeinsamen Launcher installieren, spielen und aktuell halten." />
+  <meta name="description" content="TasteGames is an indie game studio. Install, play and keep every game — like TasteJump — up to date through one shared launcher." />
   <meta name="theme-color" content="#0b0c15" />
 
   <!-- Open Graph / Social Preview -->
   <meta property="og:title" content="TasteGames – One Launcher. Multiple Games." />
-  <meta property="og:description" content="Alle TasteGames-Titel an einem Ort – installieren, spielen, aktuell halten." />
+  <meta property="og:description" content="Every TasteGames title in one place — install, play, stay up to date." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://taste-games.de/" />
   <meta property="og:image" content="https://taste-games.de/assets/img/icon.jpg" />
@@ -41,17 +41,17 @@
         <span class="brand-name" id="brandName">TasteGames</span>
       </a>
 
-      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
+      <button class="nav-toggle" id="navToggle" data-i18n-attr="aria-label:nav.menuToggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#top">Home</a></li>
-        <li><a href="#games">Games</a></li>
-        <li><a href="#launcher">Launcher</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#launcher" class="nav-cta" data-goatcounter-click="nav-download">Download</a></li>
+        <li><a href="#top" data-i18n="nav.home">Home</a></li>
+        <li><a href="#games" data-i18n="nav.games">Games</a></li>
+        <li><a href="#launcher" data-i18n="nav.launcher">Launcher</a></li>
+        <li><a href="#news" data-i18n="nav.news">News</a></li>
+        <li><a href="#about" data-i18n="nav.about">About</a></li>
+        <li><a href="#launcher" class="nav-cta" data-i18n="nav.download" data-goatcounter-click="nav-download">Download</a></li>
       </ul>
     </nav>
   </header>
@@ -61,7 +61,7 @@
     <!-- ===================== Hero ===================== -->
     <section class="hero">
       <div class="container hero-inner">
-        <span class="tag-pill">🎮 TasteJump jetzt verfügbar</span>
+        <span class="tag-pill" data-i18n="home.tagPill">🎮 TasteJump is live</span>
         <h1 class="hero-title">
           <span class="gradient-text" id="heroBrandName">TasteGames</span>
         </h1>
@@ -69,15 +69,15 @@
 
         <div class="hero-actions">
           <a href="#launcher" class="btn btn-primary btn-lg" data-goatcounter-click="download-hero">
-            <span class="btn-icon">⬇</span> Launcher herunterladen
+            <span class="btn-icon">⬇</span> <span data-i18n="home.heroDownloadBtn">Download Launcher</span>
           </a>
-          <a href="#games" class="btn btn-ghost btn-lg">Spiele entdecken</a>
+          <a href="#games" class="btn btn-ghost btn-lg" data-i18n="home.heroExploreBtn">Explore games</a>
         </div>
 
         <div class="hero-meta">
-          <span class="version-chip">Launcher <strong id="heroLauncherVersion">–</strong></span>
+          <span class="version-chip"><span data-i18n="home.launcherLabel">Launcher</span> <strong id="heroLauncherVersion">–</strong></span>
           <span class="dot-sep">•</span>
-          <span>Windows 10/11</span>
+          <span data-i18n="home.windows">Windows 10/11</span>
         </div>
       </div>
 
@@ -89,14 +89,14 @@
     <!-- ===================== Ticker ===================== -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span>TasteJump verfügbar</span>
-        <span>TasteShoot – Coming Soon</span>
-        <span>Ein Launcher für alle Spiele</span>
-        <span>Automatische Updates</span>
-        <span>TasteJump verfügbar</span>
-        <span>TasteShoot – Coming Soon</span>
-        <span>Ein Launcher für alle Spiele</span>
-        <span>Automatische Updates</span>
+        <span data-i18n="ticker.tastejumpLive">TasteJump available</span>
+        <span data-i18n="ticker.tasteshootSoon">TasteShoot – Coming Soon</span>
+        <span data-i18n="ticker.oneLauncher">One launcher for every game</span>
+        <span data-i18n="ticker.autoUpdates">Automatic updates</span>
+        <span data-i18n="ticker.tastejumpLive">TasteJump available</span>
+        <span data-i18n="ticker.tasteshootSoon">TasteShoot – Coming Soon</span>
+        <span data-i18n="ticker.oneLauncher">One launcher for every game</span>
+        <span data-i18n="ticker.autoUpdates">Automatic updates</span>
       </div>
     </div>
 
@@ -104,9 +104,9 @@
     <section class="section" id="games">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="section-kicker">Games</span>
-          <h2>Unsere Spiele</h2>
-          <p class="section-sub">Alle TasteGames-Titel – heute und in Zukunft, allesamt über den Launcher spielbar.</p>
+          <span class="section-kicker" data-i18n="games.kicker">Games</span>
+          <h2 data-i18n="games.heading">Our Games</h2>
+          <p class="section-sub" data-i18n="games.sub">Every TasteGames title — today and in the future, all playable through the Launcher.</p>
         </div>
 
         <div class="games-grid" id="gamesGrid">
@@ -119,9 +119,9 @@
     <section class="section" id="launcher">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="section-kicker">Launcher</span>
-          <h2>Der TasteGames Launcher</h2>
-          <p class="section-sub">Eine App für alle TasteGames-Titel – installieren, spielen, aktuell halten.</p>
+          <span class="section-kicker" data-i18n="launcher.kicker">Launcher</span>
+          <h2 data-i18n="launcher.heading">The TasteGames Launcher</h2>
+          <p class="section-sub" data-i18n="launcher.sub">One app for every TasteGames title — install, play, stay up to date.</p>
         </div>
 
         <div class="feature-grid" id="launcherFeatureGrid">
@@ -130,19 +130,19 @@
 
         <div class="download-card download-card-featured">
           <div class="download-card-left">
-            <div class="file-badge">Setup</div>
-            <h3>TasteGames Launcher</h3>
+            <div class="file-badge" data-i18n="launcher.fileBadge">Setup</div>
+            <h3 data-i18n="launcher.cardTitle">TasteGames Launcher</h3>
             <ul class="download-info-list">
-              <li><span class="label">Version</span><span class="value" id="launcherVersion">–</span></li>
-              <li><span class="label">Dateigröße</span><span class="value" id="launcherSize">–</span></li>
-              <li><span class="label">Plattform</span><span class="value">Windows 10/11 (64-bit)</span></li>
+              <li><span class="label" data-i18n="launcher.labelVersion">Version</span><span class="value" id="launcherVersion">–</span></li>
+              <li><span class="label" data-i18n="launcher.labelSize">File size</span><span class="value" id="launcherSize">–</span></li>
+              <li><span class="label" data-i18n="launcher.labelPlatform">Platform</span><span class="value" data-i18n="launcher.platformValue">Windows 10/11 (64-bit)</span></li>
             </ul>
           </div>
           <div class="download-card-right">
             <a href="#" class="btn btn-primary btn-xl" id="launcherBtn" download data-goatcounter-click="download-launcher">
-              <span class="btn-icon">⬇</span> Setup herunterladen
+              <span class="btn-icon">⬇</span> <span data-i18n="launcher.downloadBtn">Download Setup</span>
             </a>
-            <p class="download-hint">Installiert &amp; aktualisiert alle TasteGames-Titel automatisch</p>
+            <p class="download-hint" data-i18n="launcher.downloadHint">Installs & updates every TasteGames title automatically</p>
           </div>
         </div>
       </div>
@@ -152,9 +152,9 @@
     <section class="section" id="news">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="section-kicker">News</span>
-          <h2>Updates &amp; Patch Notes</h2>
-          <p class="section-sub">Neuigkeiten aus allen Spielen und dem Launcher, automatisch von GitHub geladen.</p>
+          <span class="section-kicker" data-i18n="news.kicker">News</span>
+          <h2 data-i18n="news.heading">Updates &amp; Patch Notes</h2>
+          <p class="section-sub" data-i18n="news.sub">Updates from every game and the Launcher, loaded automatically from GitHub.</p>
         </div>
 
         <div class="changelog-list" id="newsList">
@@ -167,8 +167,8 @@
     <section class="section" id="about">
       <div class="container">
         <div class="section-heading reveal">
-          <span class="section-kicker">About</span>
-          <h2>Über TasteGames</h2>
+          <span class="section-kicker" data-i18n="about.kicker">About</span>
+          <h2 data-i18n="about.heading">About TasteGames</h2>
           <p class="section-sub" id="aboutDescription"></p>
         </div>
       </div>
@@ -185,22 +185,22 @@
           <img src="assets/img/icon.jpg" alt="TasteGames Logo" class="brand-icon" id="footerBrandIcon" />
           <span class="brand-name" id="footerBrandName">TasteGames</span>
         </div>
-        <p>Ein Indie-Game-Studio, das mehrere Spiele über einen gemeinsamen Launcher bereitstellt.</p>
+        <p data-i18n="footer.brandTagline">An indie game studio building multiple games, delivered through one shared launcher.</p>
       </div>
 
       <div class="footer-col">
-        <h4>Kontakt</h4>
+        <h4 data-i18n="footer.contact">Contact</h4>
         <p><a id="footerEmail" href="#">kontakt@example.com</a></p>
       </div>
 
       <div class="footer-col">
-        <h4>Discord</h4>
-        <p>Tritt der Community bei, teile Feedback und finde Mitspieler.</p>
-        <a href="#" id="footerDiscord" class="btn btn-discord" target="_blank" rel="noopener">Discord beitreten</a>
+        <h4 data-i18n="footer.discord">Discord</h4>
+        <p data-i18n="footer.discordText">Join the community, share feedback and find teammates.</p>
+        <a href="#" id="footerDiscord" class="btn btn-discord" target="_blank" rel="noopener" data-i18n="footer.discordBtn">Join Discord</a>
       </div>
 
       <div class="footer-col">
-        <h4>Social Media</h4>
+        <h4 data-i18n="footer.socialMedia">Social Media</h4>
         <div class="social-links">
           <a href="#" id="socialTwitter" aria-label="Twitter / X" target="_blank" rel="noopener">𝕏</a>
           <a href="#" id="socialYoutube" aria-label="YouTube" target="_blank" rel="noopener">▶</a>
@@ -212,10 +212,11 @@
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; <span id="footerYear"></span> <span id="footerCopyrightName">TasteGames</span>. Alle Rechte vorbehalten.</p>
+      <p>&copy; <span id="footerYear"></span> <span id="footerCopyrightName">TasteGames</span>. <span data-i18n="footer.rightsReserved">All rights reserved.</span></p>
     </div>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/config.js"></script>
   <script src="js/script.js"></script>
   <script src="js/effects.js"></script>
