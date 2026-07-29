@@ -9,11 +9,10 @@
  *
  *   https://github.com/ITasteI/tastejump-website/blob/main/content.json
  *
- * Um Studio-Infos, Launcher-Daten, die Spieleliste oder Kontakt-/
- * Social-Links zu ändern, editierst du NUR content.json direkt im
- * Browser auf GitHub (Stift-Symbol, ändern, "Commit changes") — die
- * Website lädt sich die neuen Werte automatisch, ganz ohne erneutes
- * Hochladen/Deploy.
+ * Um Studio-Infos, die Spieleliste oder Kontakt-/Social-Links zu
+ * ändern, editierst du NUR content.json direkt im Browser auf GitHub
+ * (Stift-Symbol, ändern, "Commit changes") — die Website lädt sich
+ * die neuen Werte automatisch, ganz ohne erneutes Hochladen/Deploy.
  *
  * Mehrsprachige Textfelder (Taglines, Beschreibungen, Feature-Texte)
  * stehen als { "en": "...", "de": "..." } da — siehe js/i18n.js für
@@ -22,9 +21,13 @@
  *
  * Um ein neues Spiel hinzuzufügen: einfach einen weiteren Eintrag
  * im "games"-Array von content.json ergänzen (siehe dortige Struktur).
- * Für ein Spiel mit eigener Detailseite (Stats/Changelog/Screenshots)
- * zusätzlich eine games/<id>-content.json + games/<id>.html analog zu
- * games/tastejump-content.json + games/tastejump.html anlegen.
+ * Für ein Spiel mit eigener Detailseite (Changelog/Screenshots/Trailer)
+ * zusätzlich eine games/<id>-content.json + games/<id>.html anlegen,
+ * analog zu games/tastejump-content.json + games/tastejump.html.
+ *
+ * WICHTIG: TasteJump wird ausschließlich über Steam vertrieben (Release
+ * 05.08.2026, siehe games[].steamUrl/releaseDate). Der frühere
+ * eigenständige Launcher wurde eingestellt.
  * ============================================================
  */
 
@@ -33,48 +36,34 @@ const STUDIO_CONFIG = {
   // ---------- Studio-Infos ----------
   studio: {
     name: "TasteGames",
-    tagline: "One Launcher. Multiple Games.",
+    tagline: "Indie games, built with passion.",
     description: {
-      en: "TasteGames is an indie game studio building multiple games and delivering them through one shared launcher. One account, one app, your whole game library.",
-      de: "TasteGames ist ein Indie-Game-Studio, das mehrere Spiele entwickelt und diese über einen gemeinsamen Launcher bereitstellt. Ein Konto, eine App, eure ganze Spielebibliothek."
+      en: "TasteGames is an indie game studio crafting handmade worlds worth getting lost in. Small team, big love for the genre.",
+      de: "TasteGames ist ein Indie-Game-Studio, das handgemachte Welten erschafft, in denen man sich gerne verliert. Kleines Team, große Liebe zum Genre."
     },
     logo: "assets/img/icon.jpg"
-  },
-
-  // ---------- Launcher-Download ----------
-  // Fallback, falls die Launcher-Release-API nicht erreichbar ist.
-  // Wird automatisch durch das neueste Release von github.launcherRepo
-  // überschrieben (siehe syncLauncherFromGitHub() in script.js).
-  launcher: {
-    version: "1.2.1",
-    fileName: "TasteGames.Launcher.exe",
-    filePath: "https://github.com/ITasteI/taste-launcher/releases/download/v1.2.1/TasteGames.Launcher.exe",
-    fileSizeMB: 85,
-    features: [
-      { icon: "🎮", title: { en: "All games in one place", de: "Alle Spiele an einem Ort" }, text: { en: "Your entire TasteGames library in a single app.", de: "Deine komplette TasteGames-Bibliothek in einer einzigen App." } },
-      { icon: "🔄", title: { en: "Automatic updates", de: "Automatische Updates" }, text: { en: "New versions are detected and installed automatically.", de: "Neue Versionen werden automatisch erkannt und installiert." } },
-      { icon: "⚡", title: { en: "Effortless install", de: "Einfache Installation" }, text: { en: "One click is all it takes — no more manual unpacking.", de: "Ein Klick genügt – kein manuelles Entpacken mehr nötig." } },
-      { icon: "🚀", title: { en: "Fast downloads", de: "Schnelle Downloads" }, text: { en: "Optimized downloads straight from GitHub releases.", de: "Optimierte Downloads direkt von GitHub-Releases." } },
-      { icon: "📚", title: { en: "Central game library", de: "Zentrale Spielebibliothek" }, text: { en: "An overview of installed, available and upcoming titles.", de: "Übersicht über installierte, verfügbare und kommende Titel." } },
-      { icon: "🔮", title: { en: "Built for the future", de: "Zukunftssicher" }, text: { en: "New TasteGames titles show up in your library automatically.", de: "Neue TasteGames-Titel erscheinen automatisch in deiner Bibliothek." } }
-    ]
   },
 
   // ---------- Spieleübersicht ----------
   // FALLBACK, falls content.json nicht erreichbar ist. "githubRepo"
   // wird genutzt, um im News-Bereich automatisch die Releases dieses
   // Spiels mit anzuzeigen (null = noch kein Repo / kein Feed).
+  // status: "available" (grünes Badge, im Handel) | "wishlist"
+  // (vor Release, verlinkt auf Steam-Wishlist) | "coming-soon"
+  // (noch keine Store-Seite).
   games: [
     {
       id: "tastejump",
       name: "TasteJump",
-      status: "available",
+      status: "wishlist",
       tagline: { en: "Jump, run and discover a world full of color and chaos.", de: "Spring, renn und entdecke eine Welt voller Farbe und Chaos." },
-      shortDescription: { en: "A fast-paced 3D platformer with five handcrafted worlds, fair jumps and co-op multiplayer.", de: "Ein schneller 3D-Plattformer mit fünf handgefertigten Welten, fairen Sprüngen und Koop-Multiplayer." },
+      shortDescription: { en: "A fast-paced 3D platformer with five handcrafted worlds, fair jumps and co-op multiplayer. Coming to Steam August 5.", de: "Ein schneller 3D-Plattformer mit fünf handgefertigten Welten, fairen Sprüngen und Koop-Multiplayer. Ab 5. August auf Steam." },
       icon: "assets/img/icon.jpg",
-      banner: "assets/screenshots/screenshot-worldgate.jpg",
+      banner: "assets/screenshots/screenshot-meadowlands-night.jpg",
       detailUrl: "games/tastejump.html",
-      githubRepo: "ITasteI/platformer3d"
+      githubRepo: "ITasteI/platformer3d",
+      steamUrl: "https://store.steampowered.com/app/4962090/TasteJump/",
+      releaseDate: "2026-08-05"
     },
     {
       id: "tasteshoot",
@@ -85,18 +74,18 @@ const STUDIO_CONFIG = {
       icon: null,
       banner: null,
       detailUrl: "games/tasteshoot.html",
-      githubRepo: null
+      githubRepo: null,
+      steamUrl: null,
+      releaseDate: null
     }
   ],
 
-  // ---------- GitHub-Anbindung: Launcher & News ----------
-  github: {
-    launcherRepo: "ITasteI/taste-launcher"
-  },
+  // ---------- GitHub-Anbindung: News ----------
+  github: {},
 
   // ---------- GitHub-Anbindung: Alle Live-Inhalte ----------
-  // studio, launcher, games und footer werden aus content.json im
-  // Website-Repo geladen (siehe syncContentFromGitHub() in script.js).
+  // studio, games und footer werden aus content.json im Website-Repo
+  // geladen (siehe syncContentFromGitHub() in script.js).
   content: {
     repo: "ITasteI/tastejump-website",
     branch: "main",

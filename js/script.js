@@ -11,6 +11,11 @@
  * werden über I18N.pick() ausgelesen (siehe js/i18n.js). Bei
  * Sprachwechsel ("i18n:change") wird alles neu gerendert.
  *
+ * TasteJump wird ausschließlich über Steam vertrieben — Download-
+ * CTAs verlinken direkt auf die jeweilige Steam-Seite, mit Text,
+ * der sich automatisch am Release-Datum orientiert ("Wishlist"
+ * davor, "Get it on Steam" danach).
+ *
  * Für die Spiele-Detailseiten (z.B. games/tastejump.html) gibt es
  * eigene Skripte (siehe games/*.js) — diese Datei ist nur für die
  * Studio-Startseite zuständig.
@@ -23,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderScroll();
   initMobileNav();
 
-  syncLauncherFromGitHub();
   syncContentFromGitHub();
   syncNewsFromGitHub();
 
@@ -32,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Zusätzliche automatische Prüfung, falls die Seite lange geöffnet
   // bleibt (z.B. ein Browser-Tab, der nicht neu geladen wird).
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
-  setInterval(syncLauncherFromGitHub, TWO_HOURS_MS);
   setInterval(syncNewsFromGitHub, TWO_HOURS_MS);
 
   const ONE_MINUTE_MS = 60 * 1000;
@@ -43,8 +46,6 @@ function renderAll() {
   renderBrand();
   renderHero();
   renderGamesGrid();
-  renderLauncherFeatures();
-  renderLauncherDownload();
   renderAbout();
   renderFooter();
 }
@@ -63,13 +64,24 @@ function renderBrand() {
 }
 
 /* ---------------------------------------------------------
- * Hero
+ * Hero — Primärer CTA verlinkt auf die Steam-Seite des
+ * Vorzeige-Spiels (aktuell TasteJump).
  * ------------------------------------------------------- */
 function renderHero() {
-  const { studio } = STUDIO_CONFIG;
+  const { studio, games } = STUDIO_CONFIG;
   document.title = `${studio.name} – ${studio.tagline}`;
   setText('heroBrandName', studio.name);
   setText('heroTagline', studio.tagline);
+
+  const featured = (games || []).find(g => g.steamUrl) || null;
+  const btn = document.getElementById('heroSteamBtn');
+  const label = document.getElementById('heroSteamLabel');
+  if (featured && btn) {
+    btn.href = featured.steamUrl;
+    if (label) label.textContent = steamCtaLabel(featured.releaseDate);
+  } else if (btn) {
+    btn.style.display = 'none';
+  }
 }
 
 /* ---------------------------------------------------------
@@ -82,17 +94,24 @@ function renderGamesGrid() {
   const games = STUDIO_CONFIG.games || [];
 
   grid.innerHTML = games.map((game, i) => {
-    const isAvailable = game.status === 'available';
+    const hasSteam = !!game.steamUrl;
     const banner = game.banner
       ? `<img src="${game.banner}" alt="${escapeHtml(game.name)}" />`
       : `<div class="game-card-banner-placeholder">${escapeHtml(game.name)}</div>`;
-    const badge = isAvailable
-      ? `<span class="game-status-badge available">${I18N.t('games.badgeAvailable')}</span>`
-      : `<span class="game-status-badge coming-soon">${I18N.t('games.badgeComingSoon')}</span>`;
-    const ctaHref = game.detailUrl || '#';
-    const ctaLabel = isAvailable ? I18N.t('games.ctaLearnMore') : I18N.t('games.ctaComingSoon');
-    const ctaClass = isAvailable ? 'btn btn-primary' : 'btn btn-ghost';
-    const ctaAttrs = isAvailable ? '' : 'aria-disabled="true"';
+
+    let badge, ctas;
+    if (hasSteam) {
+      const releasedYet = isReleased(game.releaseDate);
+      badge = `<span class="game-status-badge ${releasedYet ? 'available' : 'wishlist'}">${releasedYet ? I18N.t('games.badgeAvailable') : I18N.t('games.badgeWishlist')}</span>`;
+      ctas = `
+        <a href="${game.detailUrl || '#'}" class="btn btn-ghost" data-goatcounter-click="game-${escapeHtml(game.id)}">${I18N.t('games.ctaLearnMore')}</a>
+        <a href="${game.steamUrl}" class="btn btn-steam" target="_blank" rel="noopener" data-goatcounter-click="steam-${escapeHtml(game.id)}">${steamCtaLabel(game.releaseDate)}</a>
+      `;
+    } else {
+      badge = `<span class="game-status-badge coming-soon">${I18N.t('games.badgeComingSoon')}</span>`;
+      ctas = `<a href="${game.detailUrl || '#'}" class="btn btn-ghost" aria-disabled="true" data-goatcounter-click="game-${escapeHtml(game.id)}">${I18N.t('games.ctaComingSoon')}</a>`;
+    }
+
     const staggerClass = `reveal reveal-${Math.min(i + 1, 6)}`;
 
     return `
@@ -102,47 +121,13 @@ function renderGamesGrid() {
           <h3>${escapeHtml(game.name)}</h3>
           <p class="game-card-tagline">${escapeHtml(I18N.pick(game.tagline))}</p>
           <p class="game-card-desc">${escapeHtml(I18N.pick(game.shortDescription) || '')}</p>
-          <a href="${ctaHref}" class="${ctaClass}" ${ctaAttrs} data-goatcounter-click="game-${escapeHtml(game.id)}">${ctaLabel}</a>
+          <div class="game-card-ctas">${ctas}</div>
         </div>
       </div>
     `;
   }).join('');
 
   if (window.reinitScrollReveal) window.reinitScrollReveal();
-}
-
-/* ---------------------------------------------------------
- * Launcher: Feature-Grid
- * ------------------------------------------------------- */
-function renderLauncherFeatures() {
-  const grid = document.getElementById('launcherFeatureGrid');
-  if (!grid) return;
-
-  const features = STUDIO_CONFIG.launcher.features || [];
-  grid.innerHTML = features.map((f, i) => `
-    <div class="feature-card reveal reveal-${Math.min(i + 1, 6)}">
-      <span class="f-icon">${f.icon}</span>
-      <h3>${escapeHtml(I18N.pick(f.title))}</h3>
-      <p>${escapeHtml(I18N.pick(f.text))}</p>
-    </div>
-  `).join('');
-
-  if (window.reinitScrollReveal) window.reinitScrollReveal();
-}
-
-/* ---------------------------------------------------------
- * Launcher-Download
- * ------------------------------------------------------- */
-function renderLauncherDownload() {
-  const { launcher } = STUDIO_CONFIG;
-  if (!launcher) return;
-
-  setText('launcherVersion', launcher.version);
-  setText('launcherSize', `${launcher.fileSizeMB} MB`);
-  setText('heroLauncherVersion', launcher.version);
-
-  const btn = document.getElementById('launcherBtn');
-  if (btn) btn.href = launcher.filePath;
 }
 
 /* ---------------------------------------------------------
@@ -214,50 +199,11 @@ function initMobileNav() {
 }
 
 /* ---------------------------------------------------------
- * Launcher-Download automatisch vom neuesten Release des
- * Launcher-Repos übernehmen (Version, Dateiname, Größe, Link).
- * ------------------------------------------------------- */
-async function syncLauncherFromGitHub() {
-  const { github } = STUDIO_CONFIG;
-  if (!github || !github.launcherRepo) return;
-
-  try {
-    const res = await fetch(`https://api.github.com/repos/${github.launcherRepo}/releases?per_page=5`, {
-      headers: { Accept: 'application/vnd.github+json' }
-    });
-    if (!res.ok) throw new Error(`GitHub API antwortete mit ${res.status}`);
-
-    const releases = await res.json();
-    const published = releases
-      .filter(r => !r.draft)
-      .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-    if (published.length === 0) return;
-
-    const latest = published[0];
-    const asset = latest.assets && latest.assets.find(a => a.name.endsWith('.exe'))
-      || (latest.assets && latest.assets[0]);
-    if (!asset) return;
-
-    STUDIO_CONFIG.launcher.version = parseSemver(latest.tag_name).raw;
-    STUDIO_CONFIG.launcher.fileName = asset.name;
-    STUDIO_CONFIG.launcher.filePath = asset.browser_download_url;
-    STUDIO_CONFIG.launcher.fileSizeMB = Math.round(asset.size / (1024 * 1024));
-
-    renderLauncherDownload();
-  } catch (err) {
-    console.warn('Launcher-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
-  }
-}
-
-/* ---------------------------------------------------------
- * News: Releases aus allen Spiele-Repos + Launcher-Repo laden,
- * zusammenführen und nach Datum sortiert anzeigen.
+ * News: Releases aus allen Spiele-Repos laden, zusammenführen
+ * und nach Datum sortiert anzeigen.
  * ------------------------------------------------------- */
 async function syncNewsFromGitHub() {
   const sources = [];
-  if (STUDIO_CONFIG.github && STUDIO_CONFIG.github.launcherRepo) {
-    sources.push({ repo: STUDIO_CONFIG.github.launcherRepo, label: 'Launcher' });
-  }
   for (const game of STUDIO_CONFIG.games || []) {
     if (game.githubRepo) sources.push({ repo: game.githubRepo, label: game.name });
   }
@@ -280,9 +226,7 @@ async function syncNewsFromGitHub() {
     }));
 
     // Badge-Typ (Release/Neu/Bugfix) je Quelle einzeln berechnen —
-    // jede Quelle hat ihre eigene Versionszählung, ein Vergleich über
-    // Quellen hinweg (z.B. TasteJump v1.6.0 gegen Launcher v1.2.1)
-    // ergäbe keinen sinnvollen Versionssprung.
+    // jede Quelle hat ihre eigene Versionszählung.
     const entriesBySource = results.flatMap(releases => {
       const sorted = [...releases].sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
       const versions = sorted.map(r => parseSemver(r.tag_name));
@@ -342,8 +286,8 @@ window.addEventListener('i18n:change', () => {
 });
 
 /* ---------------------------------------------------------
- * Alle übrigen Inhalte (Studio, Launcher, Spieleliste, Footer)
- * aus content.json im Website-Repo laden — dort direkt auf
+ * Alle übrigen Inhalte (Studio, Spieleliste, Footer) aus
+ * content.json im Website-Repo laden — dort direkt auf
  * github.com bearbeitbar, ganz ohne Website neu hochzuladen.
  * ------------------------------------------------------- */
 async function syncContentFromGitHub() {
@@ -359,29 +303,12 @@ async function syncContentFromGitHub() {
     if (data.studio) STUDIO_CONFIG.studio = data.studio;
     if (data.games) STUDIO_CONFIG.games = data.games;
     if (data.footer) STUDIO_CONFIG.footer = data.footer;
-    // Launcher-Basisdaten aus content.json übernehmen, aber Live-Werte
-    // von syncLauncherFromGitHub() (Version/Größe/Link) nicht verlieren.
-    // Nur bekannte Felder übernehmen und dabei bereits live von GitHub
-    // synchronisierte Werte (version/fileName/filePath/fileSizeMB aus
-    // syncLauncherFromGitHub) nicht mit älteren content.json-Werten
-    // überschreiben. Fehlt ein Feld (z.B. "features") in content.json,
-    // bleibt der bisherige Wert erhalten statt zu verschwinden.
-    if (data.launcher) {
-      Object.assign(STUDIO_CONFIG.launcher, data.launcher, pickDefined(STUDIO_CONFIG.launcher, ['version', 'fileName', 'filePath', 'fileSizeMB']));
-    }
 
     renderAll();
   } catch (err) {
     // Fallback-Daten aus config.js bleiben unverändert sichtbar.
     console.warn('Content-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
   }
-}
-
-/** Übernimmt aus `source` nur die angegebenen Keys (für Merge-Zwecke). */
-function pickDefined(source, keys) {
-  const out = {};
-  for (const k of keys) if (source && source[k] !== undefined) out[k] = source[k];
-  return out;
 }
 
 /** Zerlegt einen Tag-Namen wie "v1.4.1" in vergleichbare Zahlen. */
@@ -435,6 +362,17 @@ function formatDate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d)) return dateStr;
   return new Intl.DateTimeFormat(I18N.locale(), { day: '2-digit', month: 'long', year: 'numeric' }).format(d);
+}
+
+/** Ist das Release-Datum bereits erreicht (oder kein Datum bekannt = ja)? */
+function isReleased(releaseDate) {
+  if (!releaseDate) return true;
+  return new Date() >= new Date(releaseDate);
+}
+
+/** "Wishlist on Steam" vor Release, "Get it on Steam" danach — automatisch anhand des echten Datums. */
+function steamCtaLabel(releaseDate) {
+  return isReleased(releaseDate) ? I18N.t('steam.getOnSteam') : I18N.t('steam.wishlist');
 }
 
 function escapeHtml(str) {

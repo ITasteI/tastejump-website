@@ -154,6 +154,18 @@ main, header, footer { position: relative; z-index: 1; }
 }
 .btn-discord:hover { background: rgba(88, 101, 242, 0.28); transform: translateY(-2px); }
 
+.btn-steam {
+  background: linear-gradient(135deg, #1b2838, #2a475e);
+  border: 1px solid #66c0f4;
+  color: #c7ecff;
+  box-shadow: 0 8px 30px rgba(27, 40, 56, 0.5);
+}
+.btn-steam:hover {
+  background: linear-gradient(135deg, #223b52, #35618a);
+  box-shadow: 0 12px 40px rgba(102, 192, 244, 0.35);
+  transform: translateY(-2px);
+}
+
 .btn-icon { font-size: 1rem; }
 
 /* ---------- Header / Nav ---------- */
@@ -436,6 +448,22 @@ main, header, footer { position: relative; z-index: 1; }
 }
 .download-hint { font-size: 0.82rem; color: var(--text-low); text-align: center; }
 
+/* ---------- Trailer ---------- */
+.trailer-frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  background: var(--bg-2);
+}
+.trailer-frame video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  background: #000;
+}
+
 /* ---------- Gallery ---------- */
 .gallery {
   display: grid;
@@ -552,6 +580,7 @@ main, header, footer { position: relative; z-index: 1; }
   backdrop-filter: blur(6px);
 }
 .game-status-badge.available { background: rgba(52, 225, 154, 0.15); color: var(--success); border: 1px solid rgba(52, 225, 154, 0.4); }
+.game-status-badge.wishlist { background: rgba(102, 192, 244, 0.15); color: #66c0f4; border: 1px solid rgba(102, 192, 244, 0.4); }
 .game-status-badge.coming-soon { background: rgba(255, 184, 77, 0.15); color: var(--warning); border: 1px solid rgba(255, 184, 77, 0.4); }
 
 .game-card-body {
@@ -566,6 +595,8 @@ main, header, footer { position: relative; z-index: 1; }
 .game-card-desc { color: var(--text-low); font-size: 0.9rem; flex: 1; }
 .game-card-body .btn { align-self: flex-start; margin-top: 8px; }
 .game-card-body .btn[aria-disabled="true"] { opacity: 0.6; cursor: default; pointer-events: none; }
+.game-card-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.game-card-ctas .btn { margin-top: 0; font-size: 0.9rem; padding: 11px 20px; }
 
 /* ---------- News-Quelle-Label ---------- */
 .news-source {
@@ -813,7 +844,7 @@ main, header, footer { position: relative; z-index: 1; }
 .cursor-dot.cursor-dot-hover { background: var(--accent); }
 
 /* ---------- Magnetische Buttons & Tilt-Karten ---------- */
-.btn-primary, .btn-ghost, .btn-discord {
+.btn-primary, .btn-ghost, .btn-discord, .btn-steam {
   transition: transform .2s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
 }
 .game-card, .feature-card {

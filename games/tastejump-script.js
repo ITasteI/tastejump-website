@@ -5,9 +5,13 @@
  * Liest alle Inhalte aus GAME_CONFIG (games/tastejump-config.js,
  * Fallback) und rendert sie in die entsprechenden DOM-Elemente.
  * Live-Daten kommen aus:
- *  - games/tastejump-content.json (Spiel: Stats/Server/About/Screenshots)
+ *  - games/tastejump-content.json (Spiel: Steam/Trailer/About/Screenshots)
  *  - content.json im Repo-Wurzelverzeichnis (Footer/Marke, Studio-weit)
- *  - GitHub-Releases von platformer3d (Changelog & Version)
+ *  - GitHub-Releases von platformer3d (Changelog)
+ *
+ * TasteJump wird ausschließlich über Steam vertrieben — alle
+ * Download-/Play-CTAs verlinken auf GAME_CONFIG.steam.url, mit einem
+ * Text, der sich automatisch am Release-Datum orientiert.
  *
  * Mehrsprachige Felder werden über I18N.pick() ausgelesen (siehe
  * js/i18n.js). Bei Sprachwechsel ("i18n:change") wird alles neu
@@ -22,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderScroll();
   initMobileNav();
   initLightbox();
+  initTrailerLazyLoad();
 
   syncChangelogFromGitHub();
   syncContentFromGitHub();
@@ -39,10 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderAll() {
   renderHero();
+  renderSteam();
+  renderTrailer();
   renderGallery();
   renderAbout();
-  renderStats();
-  renderServerStatus();
   renderChangelog();
   renderFooter();
 }
@@ -54,7 +59,77 @@ function renderHero() {
   const { game } = GAME_CONFIG;
   document.title = `${game.name} – ${I18N.t('game.pageTitleSuffix')}`;
   setText('heroTagline', I18N.pick(game.tagline));
-  setText('heroVersion', (GAME_CONFIG.changelog[0] && GAME_CONFIG.changelog[0].version) || '–');
+}
+
+/* ---------------------------------------------------------
+ * Steam: CTA-Buttons (Nav, Hero, Steam-Sektion) + Release-Datum.
+ * Text schaltet automatisch von "Wishlist" auf "Get it on Steam"
+ * um, sobald das echte Release-Datum erreicht ist.
+ * ------------------------------------------------------- */
+function renderSteam() {
+  const { steam } = GAME_CONFIG;
+  if (!steam) return;
+
+  const label = steamCtaLabel(steam.releaseDate);
+  const dateText = formatDate(steam.releaseDate);
+
+  const navBtn = document.getElementById('navSteamBtn');
+  const heroBtn = document.getElementById('heroSteamBtn');
+  const heroLabel = document.getElementById('heroSteamLabel');
+  const steamBtn = document.getElementById('steamBtn');
+  const steamBtnLabel = document.getElementById('steamBtnLabel');
+
+  if (navBtn) navBtn.href = steam.url;
+  if (heroBtn) heroBtn.href = steam.url;
+  if (heroLabel) heroLabel.textContent = label;
+  if (steamBtn) steamBtn.href = steam.url;
+  if (steamBtnLabel) steamBtnLabel.textContent = label;
+
+  setText('heroReleaseDate', dateText);
+  setText('steamReleaseDate', dateText);
+}
+
+/** Ist das Release-Datum bereits erreicht (oder kein Datum bekannt = ja)? */
+function isReleased(releaseDate) {
+  if (!releaseDate) return true;
+  return new Date() >= new Date(releaseDate);
+}
+
+/** "Wishlist on Steam" vor Release, "Get it on Steam" danach — automatisch anhand des echten Datums. */
+function steamCtaLabel(releaseDate) {
+  return isReleased(releaseDate) ? I18N.t('steam.getOnSteam') : I18N.t('steam.wishlist');
+}
+
+/* ---------------------------------------------------------
+ * Trailer: Video erst laden, wenn der Nutzer tatsächlich auf
+ * Play klickt (Datei ist groß, kein Autoplay/Preload).
+ * ------------------------------------------------------- */
+function renderTrailer() {
+  const { trailer } = GAME_CONFIG;
+  const video = document.getElementById('trailerVideo');
+  if (!trailer || !video) return;
+
+  video.dataset.src = trailer.url;
+  if (trailer.poster) video.poster = trailer.poster;
+}
+
+function initTrailerLazyLoad() {
+  const video = document.getElementById('trailerVideo');
+  if (!video) return;
+
+  const loadSource = () => {
+    if (video.src || !video.dataset.src) return;
+    const source = document.createElement('source');
+    source.src = video.dataset.src;
+    source.type = 'video/mp4';
+    video.appendChild(source);
+    video.load();
+  };
+
+  // Sobald der Nutzer auf das Poster-Bild/Play-Icon klickt, wird
+  // die Datei erst dann tatsächlich angefragt (preload="none").
+  video.addEventListener('play', loadSource, { once: true });
+  video.addEventListener('click', loadSource, { once: true });
 }
 
 /* ---------------------------------------------------------
@@ -139,44 +214,6 @@ function renderAbout() {
   }
 
   if (window.reinitScrollReveal) window.reinitScrollReveal();
-}
-
-/* ---------------------------------------------------------
- * Spielerstatistiken
- * ------------------------------------------------------- */
-function renderStats() {
-  const { stats } = GAME_CONFIG;
-  const animate = typeof window.animateCountUp === 'function';
-  if (animate) {
-    window.animateCountUp(document.getElementById('statOnline'), stats.playersOnline);
-    window.animateCountUp(document.getElementById('statToday'), stats.playersToday);
-    window.animateCountUp(document.getElementById('statTotal'), stats.playersTotal);
-    window.animateCountUp(document.getElementById('statPeak'), stats.playersPeak);
-  } else {
-    setText('statOnline', formatNumber(stats.playersOnline));
-    setText('statToday', formatNumber(stats.playersToday));
-    setText('statTotal', formatNumber(stats.playersTotal));
-    setText('statPeak', formatNumber(stats.playersPeak));
-  }
-}
-
-/* ---------------------------------------------------------
- * Serverstatus
- * ------------------------------------------------------- */
-function renderServerStatus() {
-  const { server } = GAME_CONFIG;
-  const dot = document.getElementById('serverStatusDot');
-
-  const statusMap = {
-    online: I18N.t('server.online'),
-    offline: I18N.t('server.offline'),
-    maintenance: I18N.t('server.maintenance')
-  };
-
-  if (dot) dot.className = `status-dot ${server.status}`;
-  setText('serverStatusLabel', statusMap[server.status] || I18N.t('server.unknown'));
-  const checked = document.getElementById('serverStatusChecked');
-  if (checked) checked.textContent = `${I18N.t('stats.lastChecked')} ${server.lastChecked}`;
 }
 
 /* ---------------------------------------------------------
@@ -281,7 +318,7 @@ function initMobileNav() {
 }
 
 /* ---------------------------------------------------------
- * GitHub-Sync: Changelog & Versionsnummer
+ * GitHub-Sync: Changelog
  * ------------------------------------------------------- */
 async function syncChangelogFromGitHub() {
   const { github } = GAME_CONFIG;
@@ -311,7 +348,6 @@ async function syncChangelogFromGitHub() {
     }));
 
     renderChangelog();
-    renderHero();
   } catch (err) {
     console.warn('GitHub-Changelog-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
   }
@@ -350,7 +386,7 @@ function parseReleaseBody(body) {
 }
 
 /* ---------------------------------------------------------
- * Spiel-Live-Inhalte (Stats, Server, About, Screenshots) aus
+ * Spiel-Live-Inhalte (Steam, Trailer, About, Screenshots) aus
  * games/tastejump-content.json laden.
  * ------------------------------------------------------- */
 async function syncContentFromGitHub() {
@@ -364,16 +400,16 @@ async function syncContentFromGitHub() {
 
     const data = await res.json();
     if (data.game) GAME_CONFIG.game = data.game;
-    if (data.stats) GAME_CONFIG.stats = data.stats;
-    if (data.server) GAME_CONFIG.server = data.server;
+    if (data.steam) GAME_CONFIG.steam = data.steam;
+    if (data.trailer) GAME_CONFIG.trailer = data.trailer;
     if (data.about) GAME_CONFIG.about = data.about;
     if (data.screenshots) GAME_CONFIG.screenshots = data.screenshots;
 
     renderHero();
+    renderSteam();
+    renderTrailer();
     renderGallery();
     renderAbout();
-    renderStats();
-    renderServerStatus();
   } catch (err) {
     console.warn('Content-Sync fehlgeschlagen, nutze Fallback-Daten:', err);
   }
@@ -410,10 +446,6 @@ async function syncStudioFooterFromGitHub() {
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
-}
-
-function formatNumber(n) {
-  return new Intl.NumberFormat(I18N.locale()).format(n);
 }
 
 function formatDate(dateStr) {

@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TasteJump – A TasteGames Title | 3D Platformer</title>
-  <meta name="description" content="TasteJump is a fast-paced 3D platformer from TasteGames full of handcrafted worlds, secrets and co-op multiplayer. Play it through the TasteGames Launcher." />
+  <meta name="description" content="TasteJump is a fast-paced 3D platformer from TasteGames full of handcrafted worlds, secrets and co-op multiplayer. Releasing on Steam August 5, 2026." />
   <meta name="theme-color" content="#0b0c15" />
 
   <!-- Open Graph / Social Preview -->
   <meta property="og:title" content="TasteJump – A TasteGames Title" />
-  <meta property="og:description" content="Jump, run and discover a world full of color and chaos." />
+  <meta property="og:description" content="Jump, run and discover a world full of color and chaos. On Steam August 5, 2026." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://taste-games.de/games/tastejump.html" />
   <meta property="og:image" content="https://taste-games.de/assets/img/icon.jpg" />
@@ -47,11 +47,11 @@
 
       <ul class="nav-links" id="navLinks">
         <li><a href="../index.html#games" data-i18n="nav.allGames">All Games</a></li>
+        <li><a href="#trailer" data-i18n="nav.trailer">Trailer</a></li>
         <li><a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a></li>
         <li><a href="#about" data-i18n="nav.aboutGame">About</a></li>
-        <li><a href="#stats" data-i18n="nav.stats">Stats</a></li>
         <li><a href="#changelog" data-i18n="nav.changelog">Changelog</a></li>
-        <li><a href="../index.html#launcher" class="nav-cta" data-i18n="nav.play" data-goatcounter-click="nav-download">Play</a></li>
+        <li><a href="#" id="navSteamBtn" class="nav-cta" target="_blank" rel="noopener" data-i18n="nav.play" data-goatcounter-click="nav-steam">Steam</a></li>
       </ul>
     </nav>
   </header>
@@ -68,14 +68,14 @@
         <p class="hero-tagline" id="heroTagline">Jump, run and discover a world full of color and chaos.</p>
 
         <div class="hero-actions">
-          <a href="../index.html#launcher" class="btn btn-primary btn-lg" data-goatcounter-click="download-hero">
-            <span class="btn-icon">⬇</span> <span data-i18n="game.playViaLauncher">Play via Launcher</span>
+          <a href="#" class="btn btn-steam btn-lg" id="heroSteamBtn" target="_blank" rel="noopener" data-goatcounter-click="steam-hero">
+            <span class="btn-icon">▶</span> <span id="heroSteamLabel">Wishlist on Steam</span>
           </a>
-          <a href="#about" class="btn btn-ghost btn-lg" data-i18n="game.learnMore">Learn more</a>
+          <a href="#trailer" class="btn btn-ghost btn-lg" data-i18n="trailer.playBtn">Play trailer</a>
         </div>
 
         <div class="hero-meta">
-          <span class="version-chip"><span data-i18n="game.versionLabel">Version</span> <strong id="heroVersion">–</strong></span>
+          <span class="version-chip" id="heroReleaseDate">Out August 5, 2026</span>
           <span class="dot-sep">•</span>
           <span data-i18n="home.windows">Windows 10/11</span>
         </div>
@@ -83,6 +83,21 @@
 
       <div class="hero-scroll-hint" aria-hidden="true">
         <span></span>
+      </div>
+    </section>
+
+    <!-- ===================== Trailer ===================== -->
+    <section class="section" id="trailer">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="section-kicker" data-i18n="trailer.kicker">Trailer</span>
+          <h2 data-i18n="trailer.heading">Watch the Trailer</h2>
+          <p class="section-sub" data-i18n="trailer.sub">A first look at TasteJump in motion.</p>
+        </div>
+
+        <div class="trailer-frame reveal">
+          <video id="trailerVideo" controls preload="none" playsinline></video>
+        </div>
       </div>
     </section>
 
@@ -106,6 +121,34 @@
       <button class="lightbox-close" id="lightboxClose" data-i18n-attr="aria-label:lightbox.close" aria-label="Close">✕</button>
       <img src="" alt="" id="lightboxImg" />
     </div>
+
+    <!-- ===================== Steam ===================== -->
+    <section class="section" id="steam">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="section-kicker" data-i18n="steam.kicker">Steam</span>
+          <h2 data-i18n="steam.heading">Available on Steam</h2>
+          <p class="section-sub" data-i18n="steam.sub">TasteJump releases on Steam — wishlist now so you don't miss it.</p>
+        </div>
+
+        <div class="download-card download-card-featured">
+          <div class="download-card-left">
+            <div class="file-badge">Steam</div>
+            <h3>TasteJump</h3>
+            <ul class="download-info-list">
+              <li><span class="label" data-i18n="steam.releaseLabel">Release date</span><span class="value" id="steamReleaseDate">–</span></li>
+              <li><span class="label" data-i18n="steam.platformLabel">Platform</span><span class="value" data-i18n="steam.platformValue">Windows 10/11 (64-bit)</span></li>
+            </ul>
+          </div>
+          <div class="download-card-right">
+            <a href="#" class="btn btn-steam btn-xl" id="steamBtn" target="_blank" rel="noopener" data-goatcounter-click="steam-section">
+              <span class="btn-icon">▶</span> <span id="steamBtnLabel">Wishlist on Steam</span>
+            </a>
+            <p class="download-hint" data-i18n="steam.hint">Sold and delivered exclusively through Steam</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ===================== Über das Spiel ===================== -->
     <section class="section" id="about">
@@ -135,44 +178,6 @@
             <span class="meta-icon">🗺</span>
             <h4 data-i18n="aboutGame.worldOverview">World Overview</h4>
             <ul id="aboutWorlds"></ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== Statistiken & Serverstatus ===================== -->
-    <section class="section" id="stats">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker" data-i18n="stats.kicker">Live</span>
-          <h2 data-i18n="stats.heading">Player Statistics</h2>
-          <p class="section-sub" data-i18n="stats.sub">Current stats for TasteJump.</p>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-value" id="statOnline">–</span>
-            <span class="stat-label" data-i18n="stats.online">Players online</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" id="statToday">–</span>
-            <span class="stat-label" data-i18n="stats.today">Players today</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" id="statTotal">–</span>
-            <span class="stat-label" data-i18n="stats.total">Total players</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" id="statPeak">–</span>
-            <span class="stat-label" data-i18n="stats.peak">All-time peak</span>
-          </div>
-        </div>
-
-        <div class="server-status-card">
-          <span class="status-dot" id="serverStatusDot"></span>
-          <div class="server-status-text">
-            <strong id="serverStatusLabel" data-i18n="stats.serverLoading">Loading server status…</strong>
-            <span id="serverStatusChecked" class="server-status-sub"></span>
           </div>
         </div>
       </div>

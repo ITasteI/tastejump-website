@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TasteGames – One Launcher. Multiple Games.</title>
-  <meta name="description" content="TasteGames is an indie game studio. Install, play and keep every game — like TasteJump — up to date through one shared launcher." />
+  <title>TasteGames – Indie games, built with passion.</title>
+  <meta name="description" content="TasteGames is an indie game studio. TasteJump releases on Steam August 5, 2026 — wishlist it now." />
   <meta name="theme-color" content="#0b0c15" />
 
   <!-- Open Graph / Social Preview -->
-  <meta property="og:title" content="TasteGames – One Launcher. Multiple Games." />
-  <meta property="og:description" content="Every TasteGames title in one place — install, play, stay up to date." />
+  <meta property="og:title" content="TasteGames – Indie games, built with passion." />
+  <meta property="og:description" content="TasteJump releases on Steam August 5, 2026 — wishlist it now." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://taste-games.de/" />
   <meta property="og:image" content="https://taste-games.de/assets/img/icon.jpg" />
@@ -48,10 +48,9 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#top" data-i18n="nav.home">Home</a></li>
         <li><a href="#games" data-i18n="nav.games">Games</a></li>
-        <li><a href="#launcher" data-i18n="nav.launcher">Launcher</a></li>
         <li><a href="#news" data-i18n="nav.news">News</a></li>
         <li><a href="#about" data-i18n="nav.about">About</a></li>
-        <li><a href="#launcher" class="nav-cta" data-i18n="nav.download" data-goatcounter-click="nav-download">Download</a></li>
+        <li><a href="https://store.steampowered.com/app/4962090/TasteJump/" class="nav-cta" target="_blank" rel="noopener" data-i18n="nav.download" data-goatcounter-click="nav-steam">Steam</a></li>
       </ul>
     </nav>
   </header>
@@ -61,21 +60,21 @@
     <!-- ===================== Hero ===================== -->
     <section class="hero">
       <div class="container hero-inner">
-        <span class="tag-pill" data-i18n="home.tagPill">🎮 TasteJump is live</span>
+        <span class="tag-pill" data-i18n="home.tagPill">🎮 TasteJump — Wishlist now</span>
         <h1 class="hero-title">
           <span class="gradient-text" id="heroBrandName">TasteGames</span>
         </h1>
-        <p class="hero-tagline" id="heroTagline">One Launcher. Multiple Games.</p>
+        <p class="hero-tagline" id="heroTagline">Indie games, built with passion.</p>
 
         <div class="hero-actions">
-          <a href="#launcher" class="btn btn-primary btn-lg" data-goatcounter-click="download-hero">
-            <span class="btn-icon">⬇</span> <span data-i18n="home.heroDownloadBtn">Download Launcher</span>
+          <a href="#" class="btn btn-steam btn-lg" id="heroSteamBtn" target="_blank" rel="noopener" data-goatcounter-click="steam-hero">
+            <span class="btn-icon">▶</span> <span id="heroSteamLabel">Wishlist on Steam</span>
           </a>
           <a href="#games" class="btn btn-ghost btn-lg" data-i18n="home.heroExploreBtn">Explore games</a>
         </div>
 
         <div class="hero-meta">
-          <span class="version-chip"><span data-i18n="home.launcherLabel">Launcher</span> <strong id="heroLauncherVersion">–</strong></span>
+          <span class="version-chip" data-i18n="ticker.releaseDate">Out August 5, 2026</span>
           <span class="dot-sep">•</span>
           <span data-i18n="home.windows">Windows 10/11</span>
         </div>
@@ -89,14 +88,14 @@
     <!-- ===================== Ticker ===================== -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span data-i18n="ticker.tastejumpLive">TasteJump available</span>
+        <span data-i18n="ticker.tastejumpLive">TasteJump</span>
+        <span data-i18n="ticker.releaseDate">Out August 5, 2026</span>
+        <span data-i18n="ticker.wishlistNow">Wishlist now on Steam</span>
         <span data-i18n="ticker.tasteshootSoon">TasteShoot – Coming Soon</span>
-        <span data-i18n="ticker.oneLauncher">One launcher for every game</span>
-        <span data-i18n="ticker.autoUpdates">Automatic updates</span>
-        <span data-i18n="ticker.tastejumpLive">TasteJump available</span>
+        <span data-i18n="ticker.tastejumpLive">TasteJump</span>
+        <span data-i18n="ticker.releaseDate">Out August 5, 2026</span>
+        <span data-i18n="ticker.wishlistNow">Wishlist now on Steam</span>
         <span data-i18n="ticker.tasteshootSoon">TasteShoot – Coming Soon</span>
-        <span data-i18n="ticker.oneLauncher">One launcher for every game</span>
-        <span data-i18n="ticker.autoUpdates">Automatic updates</span>
       </div>
     </div>
 
@@ -106,44 +105,11 @@
         <div class="section-heading reveal">
           <span class="section-kicker" data-i18n="games.kicker">Games</span>
           <h2 data-i18n="games.heading">Our Games</h2>
-          <p class="section-sub" data-i18n="games.sub">Every TasteGames title — today and in the future, all playable through the Launcher.</p>
+          <p class="section-sub" data-i18n="games.sub">Every TasteGames title — today and in the future.</p>
         </div>
 
         <div class="games-grid" id="gamesGrid">
           <!-- wird dynamisch via script.js befüllt -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== Launcher ===================== -->
-    <section class="section" id="launcher">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-kicker" data-i18n="launcher.kicker">Launcher</span>
-          <h2 data-i18n="launcher.heading">The TasteGames Launcher</h2>
-          <p class="section-sub" data-i18n="launcher.sub">One app for every TasteGames title — install, play, stay up to date.</p>
-        </div>
-
-        <div class="feature-grid" id="launcherFeatureGrid">
-          <!-- wird dynamisch befüllt -->
-        </div>
-
-        <div class="download-card download-card-featured">
-          <div class="download-card-left">
-            <div class="file-badge" data-i18n="launcher.fileBadge">Setup</div>
-            <h3 data-i18n="launcher.cardTitle">TasteGames Launcher</h3>
-            <ul class="download-info-list">
-              <li><span class="label" data-i18n="launcher.labelVersion">Version</span><span class="value" id="launcherVersion">–</span></li>
-              <li><span class="label" data-i18n="launcher.labelSize">File size</span><span class="value" id="launcherSize">–</span></li>
-              <li><span class="label" data-i18n="launcher.labelPlatform">Platform</span><span class="value" data-i18n="launcher.platformValue">Windows 10/11 (64-bit)</span></li>
-            </ul>
-          </div>
-          <div class="download-card-right">
-            <a href="#" class="btn btn-primary btn-xl" id="launcherBtn" download data-goatcounter-click="download-launcher">
-              <span class="btn-icon">⬇</span> <span data-i18n="launcher.downloadBtn">Download Setup</span>
-            </a>
-            <p class="download-hint" data-i18n="launcher.downloadHint">Installs & updates every TasteGames title automatically</p>
-          </div>
         </div>
       </div>
     </section>
@@ -154,7 +120,7 @@
         <div class="section-heading reveal">
           <span class="section-kicker" data-i18n="news.kicker">News</span>
           <h2 data-i18n="news.heading">Updates &amp; Patch Notes</h2>
-          <p class="section-sub" data-i18n="news.sub">Updates from every game and the Launcher, loaded automatically from GitHub.</p>
+          <p class="section-sub" data-i18n="news.sub">Updates from every game, loaded automatically from GitHub.</p>
         </div>
 
         <div class="changelog-list" id="newsList">
@@ -185,7 +151,7 @@
           <img src="assets/img/icon.jpg" alt="TasteGames Logo" class="brand-icon" id="footerBrandIcon" />
           <span class="brand-name" id="footerBrandName">TasteGames</span>
         </div>
-        <p data-i18n="footer.brandTagline">An indie game studio building multiple games, delivered through one shared launcher.</p>
+        <p data-i18n="footer.brandTagline">An indie game studio crafting handmade worlds worth getting lost in.</p>
       </div>
 
       <div class="footer-col">

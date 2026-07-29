@@ -166,7 +166,7 @@
    * Cursor, solange dieser in der Nähe ist.
    * ------------------------------------------------------- */
   function initMagneticButtons() {
-    const buttons = document.querySelectorAll('.btn-primary, .btn-ghost, .btn-discord');
+    const buttons = document.querySelectorAll('.btn-primary, .btn-ghost, .btn-discord, .btn-steam');
 
     buttons.forEach(btn => {
       let raf = null;
